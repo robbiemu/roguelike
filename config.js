@@ -25,6 +25,11 @@ System.config({
     app: {
       main: './components/Game.jsx',
       defaultExtension: false,
+    },
+    'react-redux': {
+      main: '//wzrd.in/standalone/react-redux@latest',
+      format: 'global',
+      defaultExtension: false,
     }
   }
 });
