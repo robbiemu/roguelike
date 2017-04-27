@@ -10,14 +10,6 @@ System.config({
 
     'app': './app'
   },
-  meta: {
-    'react-redux': {
-      deps: [ 'react', 'redux']
-    },
-    'react-dom': {
-      deps: ['react']
-    }
-  },
   packages: {
     app: {
       main: './components/Game.jsx',
@@ -25,7 +17,6 @@ System.config({
     },
     'react-redux': {
       main: 'react-redux@latest',
-      format: 'global',
       defaultExtension: false,
     }
   }
