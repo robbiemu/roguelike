@@ -11,20 +11,19 @@ import RoomsGenerator from '../map/RoomsGenerator.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
-import Player from '../objects/Player.js'
-
 import InfoPanel from './InfoPanel.jsx'
 import Controls from './Controls.jsx'
 
 const rooms = RoomsGenerator.getRooms()
 
-class Game extends React.Component {
+class GamePreRedux extends React.Component {
   constructor (props) {
     super (props)
+
+    store.dispatch({reducer: 'player', type: 'NEW'})
+
     let game, ctx
-    
-    this.state = { player: new Player({name:'O Patife'}) }
-    
+        
     let settings = {
       map: this.getMap(),
       surfaces:Surfaces,
@@ -42,8 +41,8 @@ class Game extends React.Component {
   
   getMap() {
     const dg = new DungeonGenerator(0, rooms, {width:6,height:4})
-    this.state.player.position = dg.setSpawn(this.state.player) 
-    this.setState({player:this.state.player})
+    this.props.player.position = dg.setSpawn(this.props.player) 
+    this.setState({player:this.props.player})
     return dg.maze
   }
 
@@ -54,7 +53,7 @@ class Game extends React.Component {
   render () { 
     return (
       <div className="map container">
-        <InfoPanel player={this.state.player} mousePos={this.state.mousePos} />
+        <InfoPanel player={this.props.player} mousePos={this.state.mousePos} />
         <canvas ref="map" id="map" />
         <Controls ref="controls" gamestate={this.state} />
       </div>
@@ -121,6 +120,14 @@ class Game extends React.Component {
     resizeCanvas()
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    player: state.player
+  }
+}
+
+const Game = connect(mapStateToProps)(GamePreRedux);
 
 ReactDOM.render(
     <Provider store={store}>
