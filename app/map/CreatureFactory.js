@@ -16,7 +16,7 @@ bossNames.atRandom = atRandom
 let monsters = store.getState().monsters
 
 function getBossName() {
-  return `${bossNames[~~(bossNames.length * Math.random())]} the ${bossAdjectives[~~(bossAdjectives.length * Math.random())]}`
+  return `${bossNames.atRandom()} the ${bossAdjectives.atRandom()}`
 }
 
 function getBoss(depth) {
