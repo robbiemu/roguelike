@@ -10,9 +10,6 @@ System.config({
 
     'app': './app'
   },
-  paths: {
-    'react-redux': '//wzrd.in/standalone/react-redux@latest'
-  },
   meta: {
     'react-redux': {
       deps: [ 'react', 'redux']
