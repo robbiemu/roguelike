@@ -1,0 +1,36 @@
+/* Styles go here */
+
+:root {
+  font-size: 12px;
+}
+
+.styleable-html-element, html > body, body > main {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background-color: #101010;
+  color: white;
+}
+
+body, main, #app {
+  display: flex;
+  flex-direction: column;
+}
+
+main, .map.container, #app {
+  flex: 1;
+}
+
+.panel {
+  margin: 1rem;
+  border: solid thin white;
+  padding: 1rem;
+}
+
+canvas, header > h1 {
+  margin: 1rem;
+}
+
+.component:not(:first-child) {
+  padding-left: 1rem;
+}

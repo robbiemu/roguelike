@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html class="styleable-html-element">
+
+  <head>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://jspm.io/system.js"></script>
+    <script src="config.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <h1>O Patife</h1>
+    </header>
+    
+    <main>
+      <div id="app" />
+    </main>
+    
+    <script>
+      System.import('app')
+        .catch(console.error.bind(console));
+    </script>
+  </body>
+
+</html>
