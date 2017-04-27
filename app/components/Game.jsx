@@ -22,8 +22,7 @@ class GamePreRedux extends React.Component {
 
     store.dispatch({reducer: 'player', type: 'NEW'})
 
-    let game, ctx
-        
+    let game, ctx        
     let settings = {
       map: this.getMap(),
       surfaces:Surfaces,
@@ -31,12 +30,12 @@ class GamePreRedux extends React.Component {
       ctx
     }
 
-    this.state = Object.assign(this.state, {
+    this.state = {
       mousePos:undefined,
       squareSize: 0,
       game,
       settings
-    })
+    }
   }
   
   getMap() {
