@@ -1,4 +1,5 @@
 import { store } from '../store/index.js'
+import { atRandom } from '../ArrayUtils.js'
 
 import Creature from '../objects/Creature.js'
 
@@ -8,12 +9,14 @@ export default {
   getSpawner: (depth) => new Creature({name:'spawner'})
 }
 
-let bossAdjectives = store.getState().bossAdjectives
-let bossNames = store.getState().bossNames
-let monsters = store.getState().monsters
+let [bossAdjectives, bossNames, monsters] = [store.getState().bossAdjectives,
+  store.dispatch.bossNames, store.getState().monsters].map(a => {
+    a.atRandom = atRandom; 
+    return a
+})
 
 function getBossName() {
-  return `${bossNames[~~(bossNames.length * Math.random())]} the ${bossAdjectives[~~(bossAdjectives.length * Math.random())]}`
+  return `${bossNames.atRandom()} the ${bossAdjectives.atRandom()}`
 }
 
 function getBoss(depth) {
