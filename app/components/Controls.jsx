@@ -38,7 +38,7 @@ class ControlsPreRedux extends React.Component {
     }
     if (vector) {
       e.preventDefault();
-      gamestate.game.handleMove(this.props.player, vector, gamestate.settings.map, gamestate.player);
+      gamestate.game.handleMove(this.props.player, vector, gamestate.settings.map, this.props.player);
     }
   }
   
