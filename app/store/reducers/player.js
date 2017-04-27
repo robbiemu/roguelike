@@ -3,7 +3,7 @@ import Player from '../../objects/Player.js'
 let player = undefined
 let name = 'O Patife'
 
-export default function (state={}, action) {
+export default function (state=new Player({name}), action) {
   if(action.reducer !== 'player')
     return state
   switch (action.type) {
@@ -11,6 +11,7 @@ export default function (state={}, action) {
       return player = new Player(Object.assign({name}, action.options))
       break
     case 'SET NAME':
+      player.name = action.name
       return name = action.name
       break
     default:
