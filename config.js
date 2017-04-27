@@ -17,3 +17,8 @@ System.config({
     },
   }
 });
+
+System.import('react');
+System.import('react-dom');
+System.import('redux');
+System.import('react-redux');
