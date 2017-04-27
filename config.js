@@ -16,6 +16,9 @@ System.config({
       main: './components/Game.jsx',
       defaultExtension: false,
     },
+    'react-redux': {
+      defaultExtension: false
+    }
   }
 });
 
