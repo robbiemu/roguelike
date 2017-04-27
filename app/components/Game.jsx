@@ -125,5 +125,5 @@ class Game extends React.Component {
 ReactDOM.render(
     <Provider store={store}>
       <Game />
-    </Provider>,, 
+    </Provider>,
   document.getElementById('app'));
