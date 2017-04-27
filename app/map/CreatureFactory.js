@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { store } from '../store/index.js'
 
 import Creature from '../objects/Creature.js'
 
@@ -36,14 +36,14 @@ const bossNames = [
 'retarded'
 ]*/
 
-function getBossName(store) {
+function getBossName() {
   let bossAdjectives = store.getState().bossAdjectives
   return `${bossNames[~~(bossNames.length * Math.random())]} the ${bossAdjectives[~~(bossAdjectives.length * Math.random())]}`
 }
 
-function getBoss(store, depth) {
+function getBoss(depth) {
   return {
-    name:getBossName(store),
+    name:getBossName(),
     healthMultiplier:3,
     damageMultiplier:2, 
     damage:0.67
