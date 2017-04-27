@@ -1,7 +1,9 @@
+import { connect } from 'react-redux'
+
 import Creature from '../objects/Creature.js'
 
 export default {
-  getBoss: (depth) => new Creature(getBoss(depth)),
+  getBoss: (store, depth) => new Creature(getBoss(store, depth)),
   getMonster: (depth) => new Creature(getMonster(depth)),
   getSpawner: (depth) => new Creature({name:'spawner'})
 }
@@ -19,7 +21,7 @@ const bossNames = [
 'Sephiroth',
 'Sodom'
 ]
-const bossAdjectives = [
+/*const bossAdjectives = [
 'bald',
 'evil',
 'depraved',
@@ -32,15 +34,16 @@ const bossAdjectives = [
 'herculean',
 'brilliant',
 'retarded'
-]
+]*/
 
-function getBossName() {
+function getBossName(store) {
+  let bossAdjectives = store.getState().bossAdjectives
   return `${bossNames[~~(bossNames.length * Math.random())]} the ${bossAdjectives[~~(bossAdjectives.length * Math.random())]}`
 }
 
-function getBoss(depth) {
+function getBoss(store, depth) {
   return {
-    name:getBossName(),
+    name:getBossName(store),
     healthMultiplier:3,
     damageMultiplier:2, 
     damage:0.67
