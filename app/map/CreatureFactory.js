@@ -11,7 +11,7 @@ export default {
 
 let bossAdjectives = store.getState().bossAdjectives
 bossAdjectives.atRandom = atRandom
-let bossNames = store.dispatch.bossNames
+let bossNames = store.getState().bossNames
 bossNames.atRandom = atRandom
 let monsters = store.getState().monsters
 
