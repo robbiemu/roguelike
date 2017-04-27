@@ -9,14 +9,14 @@ export default {
   getSpawner: (depth) => new Creature({name:'spawner'})
 }
 
-let [bossAdjectives, bossNames, monsters] = [store.getState().bossAdjectives,
-  store.dispatch.bossNames, store.getState().monsters].map(a => {
-    a.atRandom = atRandom; 
-    return a
-})
+let bossAdjectives = store.getState().bossAdjectives
+bossAdjectives.atRandom = atRandom
+let bossNames = store.dispatch.bossNames
+bossNames.atRandom = atRandom
+let monsters = store.getState().monsters
 
 function getBossName() {
-  return `${bossNames.atRandom()} the ${bossAdjectives.atRandom()}`
+  return `${bossNames[~~(bossNames.length * Math.random())]} the ${bossAdjectives[~~(bossAdjectives.length * Math.random())]}`
 }
 
 function getBoss(depth) {
