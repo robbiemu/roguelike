@@ -1,9 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
+import { store, mapStateToProps } from '../store/index.js'
 
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
-export default class Controls extends React.Component {
+class ControlsPreRedux extends React.Component {
   constructor (props) {
     super (props)
     window.addEventListener('keydown', 
@@ -44,7 +47,7 @@ export default class Controls extends React.Component {
     switch (surface) {
       case Surfaces.indexOf('stairs up'):
       case Surfaces.indexOf('stairs down'):
-        if(Objects.areAdjacent(gamestate.player, {position}))
+        if(Objects.areAdjacent(this.props.player, {position}))
           gameEngine.nextLevel()
         return
       /*default:
@@ -67,14 +70,15 @@ export default class Controls extends React.Component {
       case 'NOTHING':
         return
       case 'MOVE':
-        if(Objects.areAdjacent(gamestate.player, {position}))
-          gameEngine.handleMove(gamestate.player, position, map, gamestate.player)
+        if(Objects.areAdjacent(this.props.player, {position}))
+          gameEngine.handleMove(this.props.player, position, 
+            map, this.props.player)
         return
       default: //ATTACK
-        if(Objects.areAdjacent(gamestate.player, {position}) || 
-            (gamestate.player.weapon && gamestate.player.weapon.isRanged())) {
-          gameEngine.processAttack({from:gamestate.player, to:action})
-          gameEngine.turnCycle(map, gamestate.player)
+        if(Objects.areAdjacent(this.props.player, {position}) || 
+            (this.props.player.weapon && this.props.player.weapon.isRanged())) {
+          gameEngine.processAttack({from:this.props.player, to:action})
+          gameEngine.turnCycle(map, this.props.player)
         }
     }
   }
@@ -86,3 +90,6 @@ export default class Controls extends React.Component {
     ) 
   }
 }
+
+export default connect(mapStateToProps)(ControlsPreRedux);
+

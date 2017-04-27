@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider, connect } from 'react-redux'
 
-import { store } from '../store/index.js'
+import { store, mapStateToProps } from '../store/index.js'
 
 import GameEngine from '../GameEngine.js'
 
@@ -117,12 +117,6 @@ class GamePreRedux extends React.Component {
     this.setState({game, settings})
 
     resizeCanvas()
-  }
-}
-
-function mapStateToProps(state) {
-  return {
-    player: state.player
   }
 }
 
