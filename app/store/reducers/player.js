@@ -3,7 +3,7 @@ import Player from '../../objects/Player.js'
 let player = undefined
 let name = 'O Patife'
 
-export default (state=0, action) => {
+export default function (state=player, action) {
   if(action.reducer !== 'player')
     return state
   switch (action.type) {
