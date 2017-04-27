@@ -3,8 +3,7 @@ System.config({
   map: {
     'react': '//unpkg.com/react@15.5.0/dist/react.js',
     'react-dom': '//unpkg.com/react-dom@15.5.0/dist/react-dom.js',
-//    'react-redux': '//wzrd.in/standalone/react-redux@latest',
-    'react-redux': '//unpkg.com/react-redux@5.0.4/dist/react-redux.js',
+    'react-redux': '//wzrd.in/standalone/react-redux@latest',
     'redux': '//unpkg.com/redux@3.6.0/dist/redux.js',
 //    'chai': '//unpkg.com/chai@3.5.0',
 //    'mocha': '//unpkg.com/mocha@3.3.0'
@@ -15,6 +14,14 @@ System.config({
     'react-redux': ['react', 'redux'],
     'react-dom': ['react'] 
   },
+  meta: {
+    'react-redux': {
+      deps: [ 'react', 'redux']
+    },
+    'react-dom': {
+      deps: ['react']
+    }
+  },
   packages: {
     app: {
       main: './components/Game.jsx',
@@ -22,8 +29,3 @@ System.config({
     }
   }
 });
-
-System.import('react');
-System.import('react-dom');
-System.import('redux');
-System.import('react-redux');
