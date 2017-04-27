@@ -3,7 +3,7 @@ System.config({
   map: {
     'react': '//unpkg.com/react@15.5.0/dist/react.js',
     'react-dom': '//unpkg.com/react-dom@15.5.0/dist/react-dom.js',
-    'react-redux': '//wzrd.in/standalone/react-redux@latest'
+    'react-redux': '//wzrd.in/standalone/react-redux@latest',
 //    'react-redux': '//unpkg.com/react-redux@5.0.4/dist/react-redux.js',
     'redux': '//unpkg.com/redux@3.6.0/dist/redux.js',
 //    'chai': '//unpkg.com/chai@3.5.0',
