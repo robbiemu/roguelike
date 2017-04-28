@@ -40,8 +40,12 @@ export default class Creature extends Container {
 
   
   move(vector) {
-    this.position.x += vector.x
-    this.position.y += vector.y
+    store.dispatch({
+      reducer: 'dungeon', 
+      type: 'MOVE OBJECT', 
+      object:this, 
+      vector
+    })
   }
 
   getDamage () {
@@ -59,7 +63,7 @@ export default class Creature extends Container {
     this.health -= amount/this.healthMultiplier
   }
   
-  processTurn (gameEngine, map) {
+  processTurn (gameEngine) {
     this.consumeEnergyPerTurn()
     this.processEnergyBuffs()
     this.processEnergyDebuffs()
@@ -69,11 +73,13 @@ export default class Creature extends Container {
     this.processHealthDebuffs()
     
     if(this.automated && !this.isDead())
-      this.doSomething(gameEngine, map)
+      this.doSomething(gameEngine)
   }
   
-  doSomething (gameEngine, map) {
+  doSomething (gameEngine) {
     let player = store.getState().player
+    let map = store.getState().dungeon.map
+
     let vectors = [
       {x:1,y:0},
       {x:-1,y:0},
@@ -153,6 +159,7 @@ export default class Creature extends Container {
   }
   
   take(o) {
+    store.dispatch({reducer: 'dungeon', action: 'REMOVE OBJECT', object:o})
     o.position = {x:undefined, y:undefined}
     o.possess(this)
   }

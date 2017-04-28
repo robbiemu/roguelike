@@ -12,7 +12,7 @@ export default class GameEngine {
     this.objects = objects
   }
   draw () {
-    let map = this.getState().dungeon.map
+    let map = store.getState().dungeon.map
     let fw = this.ctx.canvas.width / map.length
     let fh = this.ctx.canvas.height / map[0].length
     fh = ~~(fh < fw? fh: fw)
@@ -48,7 +48,8 @@ export default class GameEngine {
   }
   isVisible(){return true}
   
-  turnCycle (map) {
+  turnCycle () {
+    let map = store.getState().dungeon.map
     map.forEach((row, ri) => {
       row.forEach((cel, ci) => cel.objects
         .filter(o => !o.isPossessable() && o.hasTurn() )
@@ -59,7 +60,7 @@ export default class GameEngine {
               
             } else {
               console.log(`${o.name} is dead!`)
-              this.kill(o, map, {x:ri, y:ci})
+              this.kill(o, {x:ri, y:ci})
             }
           }
         }))
@@ -68,43 +69,40 @@ export default class GameEngine {
     this.draw()
   }
   
-  kill (o, map, position) {
+  kill (o, position) {
+    let map = store.getState().dungeon.map
     let corpse = new Container({
       inventory: o.inventory, 
       name: 'corpse of ' + o.name,
       position: o.position
     })
     corpse.i = Objects.indexOf('corpse')
-    let c = map[position.x][position.y]
-    c.objects[c.objects.indexOf(o)] = corpse
-    this.objects[this.objects.indexOf(o)] = corpse
+
+    store.dispatch({reducer: 'dungeon', action: 'REPLACE OBJECT', 
+      from:o, to:corpse, position})
   }
   
-  handleMove (creature, vector, map) {
+  handleMove (creature, vector) {
+    let map = store.getState().dungeon.map
+
     let fro = creature.position
     let toTile = map[fro.x+vector.x][fro.y+vector.y]
-    if(toTile.surface) {
+    if(toTile.surface) { // if the surface index != 0 (UNKNOWN), then we can move there
       if(toTile.objects.every(o => o.isPossessable() || 
           o.constructor.name === 'Container')) {
-        let os = map[fro.x][fro.y].objects
-        os.splice(os.indexOf(creature), 1)
-        
-        creature.move(vector)
-        
-        let to = creature.position
+        creature.move(vector) // let the creature dispatch its movement across the map
 
-        // get items now
-        toTile.objects.forEach(o => {
+        toTile.objects.forEach(o => { // get items now
           if(o.isPossessable())
             creature.take(o)
         })
         toTile.objects=toTile.objects.filter(o => !o.isPossessable())        
-        toTile.objects.unshift(creature)
+//        toTile.objects.unshift(creature)
       } else {
         //attack
       }
       
-      this.turnCycle (map)
+      this.turnCycle()
     }
   }
   

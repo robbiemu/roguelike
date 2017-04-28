@@ -82,7 +82,8 @@ export default class DungeonGenerator {
         if (except.indexOf(this.rooms[i]) !== -1)
           continue
 
-        var dist = Math.sqrt((room.cx - this.rooms[i].cx) * (room.cx - this.rooms[i].cx) +
+        var dist = Math.sqrt((room.cx - this.rooms[i].cx) * 
+          (room.cx - this.rooms[i].cx) +
           (room.cy - this.rooms[i].cy) * (room.cy - this.rooms[i].cy));
 
         if (dist < imin) {
@@ -130,8 +131,10 @@ export default class DungeonGenerator {
     var room = {
       id: this._lastRoomId++,
       tile: Surfaces.indexOf('room'),
-      h: ~~(Math.random() * this.roomSize.height / 2.0 + this.roomSize.height / 2.0),
-      w: ~~(Math.random() * this.roomSize.width / 2.0 + this.roomSize.height / 2.0),
+      h: ~~(Math.random() * this.roomSize.height / 2.0 + 
+        this.roomSize.height / 2.0),
+      w: ~~(Math.random() * this.roomSize.width / 2.0 + 
+        this.roomSize.height / 2.0),
       x: 0,
       y: 0,
       cx: 0,
@@ -201,8 +204,10 @@ export default class DungeonGenerator {
   }
 
   _isColliding(room) {
-    for (var i = Math.max(0, room.y - 1); i < Math.min(this.h, room.y + room.h + 1); i++) {
-      for (var j = Math.max(0, room.x - 1); j < Math.min(this.w, room.x + room.w + 1); j++) {
+    for (var i = Math.max(0, room.y - 1); i < 
+        Math.min(this.h, room.y + room.h + 1); i++) {
+      for (var j = Math.max(0, room.x - 1); j < 
+          Math.min(this.w, room.x + room.w + 1); j++) {
         if (this.maze[i][j].surface != defaultTile) {
           return true;
         }

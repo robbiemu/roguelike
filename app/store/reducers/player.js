@@ -1,9 +1,9 @@
 import Player from '../../objects/Player.js'
 
-let player
 let name = 'O Patife'
+let player=new Player({name})
 
-export default function (state=new Player({name}), action) {
+export default function (state=player, action) {
   if(action.reducer !== 'player')
     return state
   switch (action.type) {

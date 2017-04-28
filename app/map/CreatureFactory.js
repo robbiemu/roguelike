@@ -9,13 +9,11 @@ export default {
   getSpawner: (depth) => new Creature({name:'spawner'})
 }
 
-let bossAdjectives = store.getState().bossAdjectives
-bossAdjectives.atRandom = atRandom
-let bossNames = store.getState().bossNames
-bossNames.atRandom = atRandom
-let monsters = store.getState().monsters
-
 function getBossName() {
+  let bossAdjectives = store.getState().bossAdjectives
+  bossAdjectives.atRandom = atRandom
+  let bossNames = store.getState().bossNames
+  bossNames.atRandom = atRandom
   return `${bossNames.atRandom()} the ${bossAdjectives.atRandom()}`
 }
 
@@ -29,6 +27,7 @@ function getBoss(depth) {
 }
 
 function getMonster(depth) {
+  let monsters = store.getState().monsters
   let selection = {}
   Object.entries(monsters)
     .filter(e => Object.entries(e[1])

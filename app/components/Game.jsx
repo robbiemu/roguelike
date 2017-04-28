@@ -17,7 +17,8 @@ class GamePreRedux extends React.Component {
     super (props)
 
     store.dispatch({reducer: 'player', type: 'NEW'})
-    store.dispatch({reducer: 'dungeon', type: 'NEW'})
+    store.dispatch({reducer: 'dungeon', type: 'GENERATE MAP'})
+    store.dispatch({reducer: 'dungeon', type: 'SET SPAWN LOCATION'})
     let position = this.props.dungeon.spawnPosition
     store.dispatch({reducer: 'player', type: 'SET POSITION', position})
 
@@ -67,7 +68,7 @@ class GamePreRedux extends React.Component {
     }
     
     self.refs.map.addEventListener('mousemove', function(evt) {
-      let mousePos = getMousePos(self.refs.uimap, evt);
+      let mousePos = getMousePos(self.refs.map, evt);
       let coords = {
         x:~~(mousePos.x/self.state.squareSize), 
         y:~~(mousePos.y/self.state.squareSize)

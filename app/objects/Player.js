@@ -11,7 +11,8 @@ export default class Player extends Creature {
     return true
   }
   /* for info panel - find the effective damage for an item or the current */
-  getEffectiveDamage(weapon=this.weapon||{damage:this.damage, multipliable:true}) {
+  getEffectiveDamage(weapon=this.weapon ||
+      {damage:this.damage, multipliable:true}) {
     let damage = weapon.damage
     if(weapon.multipliable) {
       damage = this.damageMultiplier * damage + 
@@ -24,6 +25,8 @@ export default class Player extends Creature {
     return this.getEffectiveDamage()
   }
   move(vector) {
+    store.dispatch({reducer: 'dungeon', type: 'MOVE OBJECT', 
+      object:this, vector})
     store.dispatch({reducer: 'player', type: 'MOVE', vector})
   }
 }
