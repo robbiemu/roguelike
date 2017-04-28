@@ -11,8 +11,8 @@ function replaceObject ({from, to, position}) {
   c.objects[c.objects.indexOf(from)] = to
 }
 
-function removeObject ({object, position}) {
-  let c = dungeon.map[position.x][position.y]
+function removeObject ({object}) {
+  let c = dungeon.map[object.position.x][object.position.y]
   c.objects.splice(c.objects.indexOf(object), 1)
 }
 

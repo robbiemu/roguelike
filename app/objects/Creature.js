@@ -61,6 +61,8 @@ export default class Creature extends Container {
   
   takeDamage (amount) {
     this.health -= amount/this.healthMultiplier
+    store.dispatch({ reducer: 'infoPanelKey', 
+      type: 'SET KEY', key: Math.random() })
   }
   
   processTurn (gameEngine) {
@@ -159,7 +161,7 @@ export default class Creature extends Container {
   }
   
   take(o) {
-    store.dispatch({reducer: 'dungeon', action: 'REMOVE OBJECT', object:o})
+    store.dispatch({reducer: 'dungeon', type: 'REMOVE OBJECT', object:o})
     o.position = {x:undefined, y:undefined}
     o.possess(this)
   }

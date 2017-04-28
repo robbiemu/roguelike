@@ -1,5 +1,7 @@
 import Item from './Item.js'
 
+import { store } from '../store/index.js'
+
 export default class Weapon extends Item {
   constructor ({damage, multipliable=true}={}) {
     super(arguments[0])
@@ -14,6 +16,8 @@ export default class Weapon extends Item {
           this.damage * (this.multipliable?player.damageMultiplier:1)) ||
         (player.weapon.mutliable !== this.multipliable))
       player.weapon=this
+    store.dispatch({ reducer: 'infoPanelKey', 
+      type: 'SET KEY', key: Math.random() })
   }
   isRanged () { return !this.multipliable }
 }

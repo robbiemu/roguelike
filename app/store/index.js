@@ -6,6 +6,7 @@ export function mapStateToProps(state) {
   return {
     player: state.player,
     dungeon: state.dungeon,
-    ui: state.ui
+    ui: state.ui,
+    infoPanelKey: state.infoPanelKey
   }
 }

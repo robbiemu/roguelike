@@ -17,6 +17,7 @@ export default class GameEngine {
     let fh = this.ctx.canvas.height / map[0].length
     fh = ~~(fh < fw? fh: fw)
     fw = ~~(fw < fh? fw: fh)
+    store.dispatch({reducer: 'ui', type: 'SET SQUARE SIZE', squareSize:fw})
 
     for (var i = 0; i < map.length; i++) {
       for (var j = 0; j < map[i].length; j++) {
@@ -44,7 +45,6 @@ export default class GameEngine {
         }
       }
     }
-    return fw
   }
   isVisible(){return true}
   

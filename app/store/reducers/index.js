@@ -6,8 +6,9 @@ import monsters from './monsters.js'
 import player from './player.js'
 import dungeon from './dungeon.js'
 import ui from './ui.js'
+import infoPanelKey from './infoPanelKey.js'
 
 const rootReducer = combineReducers({bossNames, bossAdjectives, monsters,
-player, dungeon, ui})
+player, dungeon, ui, infoPanelKey})
 
 export default rootReducer

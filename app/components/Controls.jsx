@@ -110,11 +110,15 @@ class ControlsPreRedux extends React.Component {
       coords.y >= context.props.dungeon.map[0].length)?
         undefined:
         context.props.dungeon.map[coords.x][coords.y]
-    store.dispatch({ reducer: 'ui', type: 'SET MOUSECELL', mouseCell })
+    if(mouseCell !== this.props.ui.mouseCell) {
+      store.dispatch({ reducer: 'ui', type: 'SET MOUSECELL', mouseCell })
+      store.dispatch({ reducer: 'infoPanelKey', 
+        type: 'SET KEY', key: Math.random() })    }
   }
 
   onClick (context, e) {
-    let mousePos = getMousePos(document.getElementById(context.props.canvasID), e)
+    let mousePos = getMousePos(
+      document.getElementById(context.props.canvasID), e)
     let coords = {
       x:~~(mousePos.x/context.props.ui.squareSize), 
       y:~~(mousePos.y/context.props.ui.squareSize)

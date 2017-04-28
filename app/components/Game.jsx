@@ -34,16 +34,16 @@ class GamePreRedux extends React.Component {
     store.dispatch({reducer: 'player', type: 'SET POSITION', position})
   }
 
-  resizeCanvas () {
-    let parentSize = this.refs.map.parentNode.getBoundingClientRect();
-    this.refs.map.width = parentSize.width - 25 // cludge but it works
-    this.refs.map.height = parentSize.height - 210
+  resizeCanvas (context) {
+    let parentSize = context.refs.map.parentNode.getBoundingClientRect();
+    context.refs.map.width = parentSize.width - 25 // cludge but it works
+    context.refs.map.height = parentSize.height - 210
 
-    let squareSize = this.props.ui.gameEngine.draw()
-    store.dispatch({reducer: 'ui', type: 'SET SQUARE SIZE', squareSize})
+    context.props.ui.gameEngine.draw()
   }
 
   nextLevel () {
+    console.log(this)
     this.cycleMap()
     this.nextGameEngine()
     
@@ -61,17 +61,17 @@ class GamePreRedux extends React.Component {
       <div className="map container">
         <InfoPanel />
         <canvas ref="map" id="map" />
-        <Controls ref="controls" canvasID="map" nextLevel={this.nextLevel} />
+        <Controls ref="controls" canvasID="map" nextLevel={this.nextLevel.bind(this)} />
       </div>
     ) 
   }
   
   componentDidMount () {
-    window.addEventListener('resize', this.resizeCanvas, false)
+    window.addEventListener('resize', (() => this.resizeCanvas(this)), false)
     this.refs.controls.getWrappedInstance().addEventListeners()
   
     this.nextGameEngine()
-    this.resizeCanvas()
+    this.resizeCanvas(this)
   }
 }
 

@@ -16,7 +16,7 @@ export default class InfoPanelPreRedux extends React.Component {
       this.props.player.weapon.name + ' ('+
         JSON.stringify({
           damage: this.props.player.weapon.damage.toFixed(3),
-          ranged: !this.props.player.weapon.multipliable.toFixed(3)
+          ranged: !this.props.player.weapon.multipliable
         }).replace(/"/g,'')
       +')': 
       `barehanded ${JSON.stringify({
@@ -62,6 +62,10 @@ export default class InfoPanelPreRedux extends React.Component {
       descriptor = JSON.stringify(props).replace(/"/g,'')
     }
     return descriptor? `${descriptor}`:''
+  }
+
+  shouldComponentUpdate (nextProps) {
+    return this.props.infoPanelKey !== nextProps.infoPanelKey
   }
   
   render() { 
