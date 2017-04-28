@@ -1,5 +1,7 @@
 import Creature from './Creature.js'
 
+import { store } from '../store/index.js'
+
 export default class Player extends Creature {
   constructor(opts) {
       opts.automated=false
@@ -20,5 +22,8 @@ export default class Player extends Creature {
   }
   getDamage() { // so the way the above is written, it is better to reuse it
     return this.getEffectiveDamage()
+  }
+  move(vector) {
+    store.dispatch({reducer: 'player', type: 'MOVE', vector})
   }
 }

@@ -46,12 +46,12 @@ export default class GameEngine {
   }
   isVisible(){return true}
   
-  turnCycle (map, player) {
+  turnCycle (map) {
     map.forEach((row, ri) => {
       row.forEach((cel, ci) => cel.objects
         .filter(o => !o.isPossessable() && o.hasTurn() )
         .forEach(o => {
-          o.processTurn(this, map, player)
+          o.processTurn(this, map)
           if (o.isDead()) {
             if (o.isPlayer()) {
               
@@ -78,7 +78,7 @@ export default class GameEngine {
     this.objects[this.objects.indexOf(o)] = corpse
   }
   
-  handleMove (creature, vector, map, player) {
+  handleMove (creature, vector, map) {
     let fro = creature.position
     let toTile = map[fro.x+vector.x][fro.y+vector.y]
     if(toTile.surface) {
@@ -90,20 +90,19 @@ export default class GameEngine {
         creature.move(vector)
         
         let to = creature.position
-        
+
         // get items now
         toTile.objects.forEach(o => {
           if(o.isPossessable())
             creature.take(o)
         })
-        toTile.objects=[]
-        
+        toTile.objects=toTile.objects.filter(o => !o.isPossessable())        
         toTile.objects.unshift(creature)
       } else {
         //attack
       }
       
-      this.turnCycle (map, player)
+      this.turnCycle (map)
     }
   }
   

@@ -38,7 +38,7 @@ class ControlsPreRedux extends React.Component {
     }
     if (vector) {
       e.preventDefault();
-      gamestate.game.handleMove(this.props.player, vector, gamestate.settings.map, this.props.player);
+      gamestate.game.handleMove(this.props.player, vector, gamestate.settings.map);
     }
   }
   
@@ -71,14 +71,13 @@ class ControlsPreRedux extends React.Component {
         return
       case 'MOVE':
         if(Objects.areAdjacent(this.props.player, {position}))
-          gameEngine.handleMove(this.props.player, position, 
-            map, this.props.player)
+          gameEngine.handleMove(this.props.player, position, map)
         return
       default: //ATTACK
         if(Objects.areAdjacent(this.props.player, {position}) || 
             (this.props.player.weapon && this.props.player.weapon.isRanged())) {
           gameEngine.processAttack({from:this.props.player, to:action})
-          gameEngine.turnCycle(map, this.props.player)
+          gameEngine.turnCycle(map)
         }
     }
   }

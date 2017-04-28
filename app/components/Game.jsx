@@ -40,8 +40,10 @@ class GamePreRedux extends React.Component {
   
   getMap() {
     const dg = new DungeonGenerator(0, rooms, {width:6,height:4})
-    this.props.player.position = dg.setSpawn(this.props.player) 
-    this.setState({player:this.props.player})
+    let position = dg.setSpawn()
+
+    store.dispatch({reducer: 'player', type: 'SET POSITION', position})
+
     return dg.maze
   }
 

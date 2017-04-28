@@ -7,6 +7,8 @@ import RoomsSpec from './RoomsSpec.js'
 import Surfaces from './Surfaces.js'
 import Objects from './Objects.js'
 
+import { store } from '../store/index.js'
+
 const defaultTile = Surfaces.indexOf('unknown')
 
 export default class DungeonGenerator {
@@ -56,7 +58,8 @@ export default class DungeonGenerator {
     this.maze = maze.map((r,x) => r.map((c,y) => this.maze[x][y] ))
   }
   
-  setSpawn(player) {
+  setSpawn() {
+    let player = store.getState().player
     player.i= Objects.indexOf('player')
     
     let room = this.rooms[Math.floor(this.rooms.length * Math.random())];

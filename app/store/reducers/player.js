@@ -8,13 +8,21 @@ export default function (state=new Player({name}), action) {
     return state
   switch (action.type) {
     case 'NEW':
-      return player = new Player(Object.assign({name}, action.options))
+      player = new Player(Object.assign({name}, action.options))
+      break
+    case 'MOVE':
+      player.position.x += action.vector.x
+      player.position.y += action.vector.y
+      break
+    case 'SET POSITION':
+      player.position = action.position
       break
     case 'SET NAME':
       player.name = action.name
-      return name = action.name
+      name = action.name
       break
     default:
       return state
   }
+  return player
 }
