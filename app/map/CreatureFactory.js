@@ -1,7 +1,7 @@
+import Creature from '../objects/Creature.js'
+
 import { store } from '../store/index.js'
 import { atRandom } from '../ArrayUtils.js'
-
-import Creature from '../objects/Creature.js'
 
 export default {
   getBoss: (depth) => new Creature(getBoss(depth)),

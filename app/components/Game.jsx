@@ -6,25 +6,23 @@ import { store, mapStateToProps } from '../store/index.js'
 
 import GameEngine from '../GameEngine.js'
 
-import DungeonGenerator from '../map/DungeonGenerator.js'
-import RoomsGenerator from '../map/RoomsGenerator.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
 import InfoPanel from './InfoPanel.jsx'
 import Controls from './Controls.jsx'
 
-const rooms = RoomsGenerator.getRooms()
-
 class GamePreRedux extends React.Component {
   constructor (props) {
     super (props)
 
     store.dispatch({reducer: 'player', type: 'NEW'})
+    store.dispatch({reducer: 'dungeon', type: 'NEW'})
+    let position = this.props.dungeon.spawnPosition
+    store.dispatch({reducer: 'player', type: 'SET POSITION', position})
 
     let game, ctx        
     let settings = {
-      map: this.getMap(),
       surfaces:Surfaces,
       objects:Objects,
       ctx
@@ -38,23 +36,10 @@ class GamePreRedux extends React.Component {
     }
   }
   
-  getMap() {
-    const dg = new DungeonGenerator(0, rooms, {width:6,height:4})
-    let position = dg.setSpawn()
-
-    store.dispatch({reducer: 'player', type: 'SET POSITION', position})
-
-    return dg.maze
-  }
-
-  processTurn () {
-    this.game.draw()
-  }
-  
   render () { 
     return (
       <div className="map container">
-        <InfoPanel player={this.props.player} mousePos={this.state.mousePos} />
+        <InfoPanel mousePos={this.state.mousePos} />
         <canvas ref="map" id="map" />
         <Controls ref="controls" gamestate={this.state} />
       </div>
@@ -67,8 +52,8 @@ class GamePreRedux extends React.Component {
     let self = this
     function resizeCanvas() {
       let parentSize = self.refs.map.parentNode.getBoundingClientRect();
-      self.refs.map.width = parentSize.width - 25 // cludge but it works
-      self.refs.map.height = parentSize.height - 210
+      self.props.dungeon.map.width = parentSize.width - 25 // cludge but it works
+      self.props.dungeon.map.height = parentSize.height - 210
 
       self.state.squareSize = game.draw()
     }
@@ -82,40 +67,49 @@ class GamePreRedux extends React.Component {
     }
     
     self.refs.map.addEventListener('mousemove', function(evt) {
-      let mousePos = getMousePos(self.refs.map, evt);
-      let coords = {x:~~(mousePos.x/self.state.squareSize), y:~~(mousePos.y/self.state.squareSize)}
-      mousePos = (coords.x >= self.state.settings.map.length || 
-        coords.y >= self.state.settings.map[0].length)?
+      let mousePos = getMousePos(self.refs.uimap, evt);
+      let coords = {
+        x:~~(mousePos.x/self.state.squareSize), 
+        y:~~(mousePos.y/self.state.squareSize)
+      }
+      mousePos = (coords.x >= self.props.dungeon.map.length || 
+        coords.y >= self.props.dungeon.map[0].length)?
           undefined:
-          self.state.settings.map[coords.x][coords.y]
+          self.props.dungeon.map[coords.x][coords.y]
       self.setState({mousePos})
     }, false);
     
     self.refs.map.addEventListener('click', function(e) {
       let mousePos = getMousePos(self.refs.map, e);
-      let coords = {x:~~(mousePos.x/self.state.squareSize), y:~~(mousePos.y/self.state.squareSize)}
-      mousePos = (coords.x >= self.state.settings.map.length || 
-        coords.y >= self.state.settings.map[0].length)?
+      let coords = {
+        x:~~(mousePos.x/self.state.squareSize), 
+        y:~~(mousePos.y/self.state.squareSize)
+      }
+      mousePos = (coords.x >= self.props.dungeon.map.length || 
+        coords.y >= self.props.dungeon.map[0].length)?
           undefined:
-          self.state.settings.map[coords.x][coords.y]
+          self.props.dungeon.map[coords.x][coords.y]
       if(mousePos)
-        self.refs.controls.handleClick(self.state.game, self.state, coords, self.state.settings.map)
+        self.refs.controls.getWrappedInstance().handleClick(
+          self.state.game, self.state, coords)
     } , false);
     
-    self.refs.map.addEventListener ("mouseout", () => self.setState({mousePos:undefined}), false);
+    self.refs.map.addEventListener ("mouseout", () => 
+      self.setState({mousePos:undefined}), false);
     
     let settings = this.state.settings
     settings.ctx = this.refs.map.getContext('2d')
     
     function nextLevel() {
-      self.state.settings.map = self.getMap()
+      store.dispatch({reducer: 'dungeon', type: 'NEW'})
+
       self.setState({ settings: self.state.settings })
-      game = new GameEngine(self.state.settings, nextLevel)
+      game = new GameEngine(self.state.settings)
       self.setState({ game })
       game.clear()
       game.draw()
     }
-    let game = new GameEngine(settings, nextLevel)
+    let game = new GameEngine(settings)
     this.setState({game, settings})
 
     resizeCanvas()
@@ -129,6 +123,3 @@ ReactDOM.render(
       <Game />
     </Provider>,
   document.getElementById('app'));
-/* ReactDOM.render(
-  <Game />,
-  document.getElementById('app')); */

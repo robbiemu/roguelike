@@ -1,5 +1,7 @@
 import Container from './Container.js'
 
+import { store } from '../store/index.js'
+
 let creature_ids=0;
 
 export default class Creature extends Container {
@@ -57,7 +59,7 @@ export default class Creature extends Container {
     this.health -= amount/this.healthMultiplier
   }
   
-  processTurn (gameEngine, map, player) {
+  processTurn (gameEngine, map) {
     this.consumeEnergyPerTurn()
     this.processEnergyBuffs()
     this.processEnergyDebuffs()
@@ -67,10 +69,11 @@ export default class Creature extends Container {
     this.processHealthDebuffs()
     
     if(this.automated && !this.isDead())
-      this.doSomething(gameEngine, map, player)
+      this.doSomething(gameEngine, map)
   }
   
-  doSomething (gameEngine, map, player) {
+  doSomething (gameEngine, map) {
+    let player = store.getState().player
     let vectors = [
       {x:1,y:0},
       {x:-1,y:0},

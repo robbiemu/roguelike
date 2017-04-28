@@ -38,12 +38,12 @@ class ControlsPreRedux extends React.Component {
     }
     if (vector) {
       e.preventDefault();
-      gamestate.game.handleMove(this.props.player, vector, gamestate.settings.map);
+      gamestate.game.handleMove(this.props.player, vector);
     }
   }
   
-  handleClick (gameEngine, gamestate, position, map) {
-    let {surface, objects} = map[position.x][position.y]
+  handleClick (gameEngine, gamestate, position) {
+    let {surface, objects} = this.props.dungeon.map[position.x][position.y]
     switch (surface) {
       case Surfaces.indexOf('stairs up'):
       case Surfaces.indexOf('stairs down'):
@@ -71,13 +71,13 @@ class ControlsPreRedux extends React.Component {
         return
       case 'MOVE':
         if(Objects.areAdjacent(this.props.player, {position}))
-          gameEngine.handleMove(this.props.player, position, map)
+          gameEngine.handleMove(this.props.player, position)
         return
       default: //ATTACK
         if(Objects.areAdjacent(this.props.player, {position}) || 
             (this.props.player.weapon && this.props.player.weapon.isRanged())) {
           gameEngine.processAttack({from:this.props.player, to:action})
-          gameEngine.turnCycle(map)
+          gameEngine.turnCycle()
         }
     }
   }
@@ -90,5 +90,6 @@ class ControlsPreRedux extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(ControlsPreRedux);
+export default connect(mapStateToProps, 
+  null, null, { withRef: true })(ControlsPreRedux);
 

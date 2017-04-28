@@ -1,9 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
+import { store, mapStateToProps } from '../store/index.js'
 
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
-export default class InfoPanel extends React.Component {
+export default class InfoPanelPreRedux extends React.Component {
   constructor (props) {
     super (props)
   }
@@ -64,14 +67,21 @@ export default class InfoPanel extends React.Component {
   render() { 
     return <div className="info panel">{this.props.mousePos?
     (<div>
-      <span className="component surface">{Object.keys(Surfaces.arrayMap[this.props.mousePos.surface])[0]}</span>
+      <span className="component surface">
+        {Object.keys(Surfaces.arrayMap[this.props.mousePos.surface])[0]}
+      </span>
       {this.getMouseoverObjects()}
     </div>):
     (<div>
-      <span className="component health">health: {this.props.player.health.toFixed(3)}</span>
-      <span className="component energy">energy: {this.props.player.energy.toFixed(3)}</span>
-      <span className="component weapon">weapon: {this.getWeaponOfPlayer()}</span>
+      <span className="component health">
+        health: {this.props.player.health.toFixed(3)}</span>
+      <span className="component energy">
+        energy: {this.props.player.energy.toFixed(3)}</span>
+      <span className="component weapon">
+        weapon: {this.getWeaponOfPlayer()}</span>
     </div>)
     }</div> 
   }
 }
+
+export default connect(mapStateToProps)(InfoPanelPreRedux);

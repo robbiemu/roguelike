@@ -1,24 +1,26 @@
 import Container from './objects/Container.js'
 import Objects from './map/Objects.js'
 
+import { store } from './store/index.js'
+
+
 export default class GameEngine {
-  constructor({map=[[]], surfaces, objects, 
-    ctx=document.getElementById('map').getContext('2d')}, nextLevel) {
-    this.map = map
+  constructor({surfaces, objects, 
+      ctx=document.getElementById('map').getContext('2d')}) {
     this.ctx = ctx
     this.surfaces = surfaces
     this.objects = objects
-    this.nextLevel = nextLevel
   }
   draw () {
-    let fw = this.ctx.canvas.width / this.map.length
-    let fh = this.ctx.canvas.height / this.map[0].length
+    let map = this.getState().dungeon.map
+    let fw = this.ctx.canvas.width / map.length
+    let fh = this.ctx.canvas.height / map[0].length
     fh = ~~(fh < fw? fh: fw)
     fw = ~~(fw < fh? fw: fh)
 
-    for (var i = 0; i < this.map.length; i++) {
-      for (var j = 0; j < this.map[i].length; j++) {
-        if(!this.isVisible(this.map[i][j])) {
+    for (var i = 0; i < map.length; i++) {
+      for (var j = 0; j < map[i].length; j++) {
+        if(!this.isVisible(map[i][j])) {
           this.ctx.beginPath()
           this.ctx.fillStyle = this.surfaces.entryMap().unknown          
           this.ctx.fillRect(i * fw, j * fh, fw, fh)
@@ -26,16 +28,16 @@ export default class GameEngine {
         } else {
           this.ctx.beginPath()
           this.ctx.fillStyle = Object.values(
-            this.surfaces.arrayMap[this.map[i][j].surface])[0]
+            this.surfaces.arrayMap[map[i][j].surface])[0]
           this.ctx.fillRect(i * fw, j * fh, fw, fh)
           this.ctx.closePath()
           
-          if(this.map[i][j].objects.length > 0) {
+          if(map[i][j].objects.length > 0) {
             this.ctx.beginPath()
             this.ctx.arc((i * fw) + (fw/2), (j * fh) + (fh/2), fw/2, 0, 
               2 * Math.PI, false)
             this.ctx.fillStyle = Object.values(
-              this.objects.arrayMap[this.map[i][j].objects[0].i])[0]
+              this.objects.arrayMap[map[i][j].objects[0].i])[0]
               this.ctx.fill()
             this.ctx.closePath()
           }
