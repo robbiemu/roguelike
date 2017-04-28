@@ -5,6 +5,7 @@ export const store = configureStore()
 export function mapStateToProps(state) {
   return {
     player: state.player,
-    dungeon: state.dungeon
+    dungeon: state.dungeon,
+    ui: state.ui
   }
 }

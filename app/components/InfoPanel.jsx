@@ -27,7 +27,7 @@ export default class InfoPanelPreRedux extends React.Component {
   }
   
   getMouseoverObjects() {
-    return this.props.mousePos.objects.map((o,i) => 
+    return this.props.ui.mouseCell.objects.map((o,i) => 
       <span className="component object" key={i}>
         {o.name + ' ' + this.getObjectDescriptor(o)}
       </span>)
@@ -65,10 +65,10 @@ export default class InfoPanelPreRedux extends React.Component {
   }
   
   render() { 
-    return <div className="info panel">{this.props.mousePos?
+    return <div className="info panel">{this.props.ui.mouseCell?
     (<div>
       <span className="component surface">
-        {Object.keys(Surfaces.arrayMap[this.props.mousePos.surface])[0]}
+        {Object.keys(Surfaces.arrayMap[this.props.ui.mouseCell.surface])[0]}
       </span>
       {this.getMouseoverObjects()}
     </div>):

@@ -18,11 +18,7 @@ function removeObject ({object, position}) {
 
 function moveObject ({object, vector}) {
   let objects = dungeon.map[object.position.x][object.position.y].objects
-  console.log(objects.length)
-
   objects.splice(objects.indexOf(object),1)
-
-  console.log(objects.length)
 
   dungeon.map[object.position.x+vector.x][object.position.y+vector.y]
     .objects.unshift(object)

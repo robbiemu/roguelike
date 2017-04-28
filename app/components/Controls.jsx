@@ -6,14 +6,31 @@ import { store, mapStateToProps } from '../store/index.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect()
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top
+  }
+}
+
 class ControlsPreRedux extends React.Component {
-  constructor (props) {
-    super (props)
-    window.addEventListener('keydown', 
-      ((e)=>this.handleKeypress(this.props.gamestate,e)));
+  addEventListeners () { //call me from parent!
+    window.addEventListener('keydown', ((e) => this.handleKeypress(this,e)))
+    
+    let canvas = document.getElementById(this.props.canvasID)
+
+    canvas.addEventListener('mousemove', ((e) => this.mouseMove(this,e)), false)
+    canvas.addEventListener('click', ((e) => this.onClick(this,e)), false)    
+    canvas.addEventListener ('mouseout', () => 
+      store.dispatch({
+        reducer: 'ui', 
+        type: 'SET MOUSECELL', 
+        mouseCell:undefined
+    }), false)
   }
   
-  handleKeypress (gamestate,e) {
+  handleKeypress (context, e) {
     let vector = '';
     switch (e.keyCode) {
       case 65: //a
@@ -38,17 +55,17 @@ class ControlsPreRedux extends React.Component {
     }
     if (vector) {
       e.preventDefault();
-      gamestate.game.handleMove(this.props.player, vector);
+      context.props.ui.gameEngine.handleMove(context.props.player, vector);
     }
   }
   
-  handleClick (gameEngine, gamestate, position) {
+  handleClick (position) {
     let {surface, objects} = this.props.dungeon.map[position.x][position.y]
     switch (surface) {
       case Surfaces.indexOf('stairs up'):
       case Surfaces.indexOf('stairs down'):
         if(Objects.areAdjacent(this.props.player, {position}))
-          gameEngine.nextLevel()
+          this.props.nextLevel()
         return
       /*default:
       case Surfaces.indexOf('unknown'): 
@@ -81,15 +98,43 @@ class ControlsPreRedux extends React.Component {
         }
     }
   }
+
+  mouseMove (context, e) {
+    let mousePos = getMousePos(
+      document.getElementById(context.props.canvasID), e)
+    let coords = {
+      x:~~(mousePos.x/context.props.ui.squareSize), 
+      y:~~(mousePos.y/context.props.ui.squareSize)
+    }
+    let mouseCell = (coords.x >= context.props.dungeon.map.length || 
+      coords.y >= context.props.dungeon.map[0].length)?
+        undefined:
+        context.props.dungeon.map[coords.x][coords.y]
+    store.dispatch({ reducer: 'ui', type: 'SET MOUSECELL', mouseCell })
+  }
+
+  onClick (context, e) {
+    let mousePos = getMousePos(document.getElementById(context.props.canvasID), e)
+    let coords = {
+      x:~~(mousePos.x/context.props.ui.squareSize), 
+      y:~~(mousePos.y/context.props.ui.squareSize)
+    }
+    mousePos = (coords.x >= context.props.dungeon.map.length || 
+      coords.y >= context.props.dungeon.map[0].length)?
+        undefined:
+        context.props.dungeon.map[coords.x][coords.y]
+    if(mousePos)
+      context.handleClick(coords)
+  }
   
-  render () { return (
-        <div className="controls panel">
-          <h2>Controls</h2>
-        </div>
+  render () { 
+    return (
+      <div className="controls panel">
+        <h2>Controls</h2>
+      </div>
     ) 
   }
 }
 
-export default connect(mapStateToProps, 
-  null, null, { withRef: true })(ControlsPreRedux);
-
+export default connect(mapStateToProps,
+  null, null, {withRef:true})(ControlsPreRedux)
