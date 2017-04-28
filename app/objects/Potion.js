@@ -7,6 +7,6 @@ export default class Potion extends Item {
     this.energy=energy
   }
     giveToPlayer (player) {
-    player.energyBuffs.push(this)
+    player.livingState.energyBuffs.push(this)
   }
 }

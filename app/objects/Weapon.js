@@ -9,15 +9,15 @@ export default class Weapon extends Item {
     this.multipliable=multipliable
   }
   giveToPlayer (player) {
-    if (!player.weapon || 
-        (player.weapon.damage * 
-          (player.weapon.multipliable?player.damageMultiplier:1) 
+    if (!player.livingState.weapon || 
+        (player.livingState.weapon.damage * 
+          (player.livingState.weapon.multipliable?
+            player.livingState.damageMultiplier:1) 
           < 
-          this.damage * (this.multipliable?player.damageMultiplier:1)) ||
-        (player.weapon.mutliable !== this.multipliable))
+          this.damage * (this.multipliable?
+            player.livingState.damageMultiplier:1)) ||
+        (player.livingState.weapon.mutliable !== this.multipliable))
       player.weapon=this
-    store.dispatch({ reducer: 'infoPanelKey', 
-      type: 'SET KEY', key: Math.random() })
   }
   isRanged () { return !this.multipliable }
 }

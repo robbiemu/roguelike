@@ -7,7 +7,7 @@ export default class Item extends Thing {
     if (byWhom.isPlayer()) {
       this.giveToPlayer(byWhom)
     } else {
-      byWhom.inventory.push(this)
+      byWhom.livingState.inventory.push(this)
     }
   }
   giveToPlayer() {

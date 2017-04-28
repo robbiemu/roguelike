@@ -12,15 +12,15 @@ export default class InfoPanelPreRedux extends React.Component {
   }
   
   getWeaponOfPlayer () {
-    return this.props.player.weapon? 
-      this.props.player.weapon.name + ' ('+
+    return this.props.player.livingState.weapon? 
+      this.props.player.livingState.weapon.name + ' ('+
         JSON.stringify({
-          damage: this.props.player.weapon.damage.toFixed(3),
-          ranged: !this.props.player.weapon.multipliable
+          damage: this.props.player.livingState.weapon.damage.toFixed(3),
+          ranged: !this.props.player.livingState.weapon.multipliable
         }).replace(/"/g,'')
       +')': 
       `barehanded ${JSON.stringify({
-        damage: this.props.player.damage.toFixed(3), 
+        damage: this.props.player.livingState.damage.toFixed(3), 
         effective: this.props.player.getEffectiveDamage().toFixed(3)
         }).replace(/"/g,'')
       }`
@@ -56,8 +56,11 @@ export default class InfoPanelPreRedux extends React.Component {
       if (o.constructor.name === 'Container') {
         props = { inventory: o.inventory }
       } else {
-        props = { level: (o.damageMultiplier * o.healthMultiplier * o.damage * 
-          Math.sqrt(o.visRange>Math.sqrt(6*4)?o.visRange:1)).toFixed(1)}
+        props = { health: o.apparentHealth(), 
+          level: (o.livingState.damageMultiplier * 
+            o.livingState.healthMultiplier * o.livingState.damage * 
+            Math.sqrt(o.livingState.visRange>Math.sqrt(6*4)?
+              o.livingState.visRange:1)).toFixed(1)}
       }
       descriptor = JSON.stringify(props).replace(/"/g,'')
     }
@@ -78,9 +81,9 @@ export default class InfoPanelPreRedux extends React.Component {
     </div>):
     (<div>
       <span className="component health">
-        health: {this.props.player.health.toFixed(3)}</span>
+        health: {this.props.player.livingState.health.toFixed(3)}</span>
       <span className="component energy">
-        energy: {this.props.player.energy.toFixed(3)}</span>
+        energy: {this.props.player.livingState.energy.toFixed(3)}</span>
       <span className="component weapon">
         weapon: {this.getWeaponOfPlayer()}</span>
     </div>)

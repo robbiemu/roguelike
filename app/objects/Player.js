@@ -6,17 +6,54 @@ export default class Player extends Creature {
   constructor(opts) {
       opts.automated=false
       super(opts)
+
+      let set = (t,p,v) => {
+        t[p] = v
+        if(typeof p === 'number' && 
+            Number.isInteger(p) && p < Number.MAX_SAFE_INTEGER)
+          store.dispatch({
+            reducer: 'infoPanelKey', 
+            type: 'SET KEY', 
+            key: Math.random()
+          })
+
+        return true
+      }
+
+      this.livingState.energyBuffs = 
+        new Proxy(this.livingState.energyBuffs,{set})
+      this.livingState.energyDebuffs = 
+        new Proxy(this.livingState.energyDebuffs,{set})
+      this.livingState.healthBuffs = 
+        new Proxy(this.livingState.healthBuffs,{set})
+      this.livingState.healthDebuffs = 
+        new Proxy(this.livingState.healthDebuffs,{set})
+
+      set = (t,p,v) => {
+        t[p] = v
+        store.dispatch({
+          reducer: 'infoPanelKey', 
+          type: 'SET KEY', 
+          key: Math.random()
+        })
+
+        return true
+      }
+
+      this.livingState=new Proxy(this.livingState, {set})
+//      this.health, this.healthMultiplier, this.damage, 
+//     this.weapon, this.damageMultiplier
   }
   isPlayer () {
     return true
   }
   /* for info panel - find the effective damage for an item or the current */
-  getEffectiveDamage(weapon=this.weapon ||
-      {damage:this.damage, multipliable:true}) {
+  getEffectiveDamage(weapon=this.livingState.weapon ||
+      {damage:this.livingState.damage, multipliable:true}) {
     let damage = weapon.damage
     if(weapon.multipliable) {
-      damage = this.damageMultiplier * damage + 
-        (this.energy**2)*(this.energy<0?-1:1)
+      damage = this.livingState.damageMultiplier * damage + 
+        (this.livingState.energy**2)*(this.livingState.energy<0?-1:1)
       damage = damage > 0.0027? damage: 0.0027
     }
     return damage

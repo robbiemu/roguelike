@@ -17,24 +17,26 @@ export default class Creature extends Container {
     visRange=Math.sqrt(6*4)
   }={}) {
     super(arguments[0])
-    this.energy=energy
-    this.energyBuffs=[]
-    this.energyDebuffs=[]
-    this.health=health
-    this.healthMultiplier = healthMultiplier
-    this.healthBuffs=[]
-    this.healthDebuffs=[]
-    this.damage=damage
-    this.weapon=undefined
-    this.damageMultiplier = damageMultiplier
-    this.visRange=visRange
-    this.inventory=inventory
-    this.automated=automated // this is a player or a vegetable
+    this.livingState = {
+      energy,
+      energyBuffs:[],
+      energyDebuffs:[],
+      health,
+      healthMultiplier,
+      healthBuffs:[],
+      healthDebuffs:[],
+      damage,
+      weapon:undefined,
+      damageMultiplier,
+      visRange,
+      inventory,
+      automated // this is a player or a vegetable
+    }
   }
   
   hasTurn () { return true }
   
-  isDead () { return this.health <= -1 }
+  isDead () { return this.livingState.health <= -1 }
   
   isPossessable () { return false }
 
@@ -50,19 +52,40 @@ export default class Creature extends Container {
 
   getDamage () {
     let damage
-    if (this.weapon) {
-      damage = this.weapon.damage * 
-        (this.weapon.multipliable? this.damageMultiplier:1)
+    if (this.livingState.weapon) {
+      damage = this.livingState.weapon.damage * 
+        (this.livingState.weapon.multipliable? 
+          this.livingState.damageMultiplier:1)
     } else {
-      damage = this.damage * this.damageMultiplier
+      damage = this.livingState.damage * this.livingState.damageMultiplier
     }
     return damage
   }
   
   takeDamage (amount) {
-    this.health -= amount/this.healthMultiplier
-    store.dispatch({ reducer: 'infoPanelKey', 
-      type: 'SET KEY', key: Math.random() })
+    this.livingState.health -= amount/this.livingState.healthMultiplier
+  }
+
+  apparentHealth () {
+    if(this.livingState.health >= 1)
+      return 'perfect'
+    if(this.livingState.health >= 0.997)
+      return 'exceptional'
+    if(this.livingState.health >= 0.95)
+      return 'remarkable'
+    if(this.livingState.health >= 0.68)
+      return 'outstanding'
+    if(this.livingState.health >= 0)
+      return 'healthy'
+    if(this.livingState.health >= -0.68)
+      return 'fine'
+    if(this.livingState.health >= -0.95)
+      return 'wounded'
+    if(this.livingState.health >= -0.997)
+      return 'mortal danger'
+    if(this.livingState.health > -1)
+      return 'final throws'
+    return 'should be dead now'
   }
   
   processTurn (gameEngine) {
@@ -74,7 +97,7 @@ export default class Creature extends Container {
     this.processHealthBuffs()
     this.processHealthDebuffs()
     
-    if(this.automated && !this.isDead())
+    if(this.livingState.automated && !this.isDead())
       this.doSomething(gameEngine)
   }
   
@@ -107,57 +130,61 @@ export default class Creature extends Container {
   }
   
   consumeEnergyPerTurn () {
-    this.energy -= 0.0027
-    if(this.energy < -1)
-      this.energy = -1
+    this.livingState.energy -= 0.0027
+    if(this.livingState.energy < -1)
+      this.livingState.energy = -1
   }
   
   processEnergyDebuffs() {
     let cost=0
-    this.energyDebuffs.forEach(e => {
+    this.livingState.energyDebuffs.forEach(e => {
       e.turnsRemaining--
       cost += e.energy
     })
-    this.energy -= cost
-    this.energyDebuffs = this.energyDebuffs.filter(e => e.turnsRemaining > 0)
+    this.livingState.energy -= cost
+    this.livingState.energyDebuffs = this.livingState.energyDebuffs
+      .filter(e => e.turnsRemaining > 0)
   }
   
   processEnergyBuffs() {
     let increase=0
-    this.energyBuffs.forEach(e => {
+    this.livingState.energyBuffs.forEach(e => {
       e.turnsRemaining--
       increase += e.energy
     })
-    this.energy += increase
-    this.energyBuffs = this.energyBuffs.filter(e => e.turnsRemaining > 0)
+    this.livingState.energy += increase
+    this.livingState.energyBuffs = this.livingState.energyBuffs
+      .filter(e => e.turnsRemaining > 0)
   }
   
   healPerTurn () {
-    if(this.health < this.energy){
-      let x = this.health - this.energy
-      let amount = x < 0.0027 && x > 0 && this.health < 0? x: 0.0027
-      this.health += amount
+    if(this.livingState.health < this.livingState.energy){
+      let x = this.livingState.health - this.livingState.energy
+      let amount = x < 0.0027 && x > 0 && this.livingState.health < 0? x: 0.0027
+      this.livingState.health += amount
     }
   }
   
   processHealthDebuffs() {
     let cost=0
-    this.healthDebuffs.forEach(h => {
+    this.livingState.healthDebuffs.forEach(h => {
       h.turnsRemaining--
       cost += h.health
     })
-    this.health -= cost
-    this.healthDebuffs = this.healthDebuffs.filter(h => h.turnsRemaining > 0)
+    this.livingState.health -= cost
+    this.livingState.healthDebuffs = this.livingState.healthDebuffs
+      .filter(h => h.turnsRemaining > 0)
   }
   
   processHealthBuffs() {
     let increase=0
-    this.healthBuffs.forEach(h => {
+    this.livingState.healthBuffs.forEach(h => {
       h.turnsRemaining--
       increase += h.health
     })
-    this.health += increase
-    this.healthBuffs = this.healthBuffs.filter(h => h.turnsRemaining > 0)
+    this.livingState.health += increase
+    this.livingState.healthBuffs = this.livingState.healthBuffs
+      .filter(h => h.turnsRemaining > 0)
   }
   
   take(o) {

@@ -7,6 +7,6 @@ export default class Food extends Item {
     this.health=health
   }
   giveToPlayer (player) {
-    player.healthBuffs.push(this)
+    player.livingState.healthBuffs.push(this)
   }
 }

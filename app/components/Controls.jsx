@@ -93,8 +93,8 @@ class ControlsPreRedux extends React.Component {
       default: //ATTACK
         if(Objects.areAdjacent(this.props.player, {position}) || 
             (this.props.player.weapon && this.props.player.weapon.isRanged())) {
-          gameEngine.processAttack({from:this.props.player, to:action})
-          gameEngine.turnCycle()
+          this.props.ui.gameEngine.processAttack({from:this.props.player, to:action})
+          this.props.ui.gameEngine.turnCycle()
         }
     }
   }

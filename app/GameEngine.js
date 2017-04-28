@@ -78,7 +78,7 @@ export default class GameEngine {
     })
     corpse.i = Objects.indexOf('corpse')
 
-    store.dispatch({reducer: 'dungeon', action: 'REPLACE OBJECT', 
+    store.dispatch({reducer: 'dungeon', type: 'REPLACE OBJECT', 
       from:o, to:corpse, position})
   }
   
@@ -135,7 +135,7 @@ export default class GameEngine {
       }
 
       to.takeDamage(damage)
-      console.log(`${to.name} attacked (falls to ${to.health} health)`)
+      console.log(`${to.name} attacked (falls to ${to.livingState.health} health)`)
     }
 
 }
