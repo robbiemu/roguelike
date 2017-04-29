@@ -17,6 +17,7 @@ export default class GameEngine {
     let state = store.getState()
     let map = state.dungeon.map
     let visited = state.dungeon.visited
+    let player = state.player
     let fw = this.ctx.canvas.width / map.length
     let fh = this.ctx.canvas.height / map[0].length
     fh = ~~(fh < fw? fh: fw)
@@ -40,8 +41,15 @@ export default class GameEngine {
           }
         } else {
           this.ctx.beginPath()
-          this.ctx.fillStyle = Object.values(
-            this.surfaces.arrayMap[map[i][j].surface])[0]
+
+          const a = i - player.position.x
+          const b = j - player.position.y
+          const dist = Math.sqrt( a*a + b*b );
+          const shade = (dist/player.livingState.visRange) * 
+            (map[i][j].surface? 0.667: 0.25)
+
+          this.ctx.fillStyle = shadeBlendConvert(shade, Object.values(
+            this.surfaces.arrayMap[map[i][j].surface])[0], '#878787')
           this.ctx.fillRect(i * fw, j * fh, fw, fh)
           this.ctx.closePath()
           
