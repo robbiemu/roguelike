@@ -196,6 +196,7 @@ class ControlsPreRedux extends React.Component {
     return (
       <div className="controls panel">
         <h2>Controls</h2>
+        <div className="float-right">mouseover, arrow keys, click adjacent</div>
       </div>
     ) 
   }
