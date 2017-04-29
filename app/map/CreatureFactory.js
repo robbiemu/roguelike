@@ -8,6 +8,7 @@ import { store } from '../store/index.js'
 import { atRandom } from '../ArrayUtils.js'
 
 export default {
+  getMonsterLevel,
   getBoss: (depth) => new Creature(getBoss(depth)),
   getMonster: (depth) => new Creature(getMonster(depth)),
   getSpawner: (depth) => new Spawner({
@@ -65,6 +66,8 @@ function getItems (depth) {
 
 function getMonsterLevel(e) {
   return 2 * Object.entries(e[1]).reduce((p,c) => { 
+      if(!Object.keys(Creature.defaultLevelParameters).includes(c[0]))
+        return p
       let comp 
       switch (c[0]) {
         case 'visRange':

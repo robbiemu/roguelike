@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { store, mapStateToProps } from '../store/index.js'
 
+import CreatureFactory from '../map/CreatureFactory.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
@@ -53,10 +54,8 @@ export default class InfoPanelPreRedux extends React.Component {
         props = { inventory: o.inventory.map(i=>i.name) }
       } else {
         props = { health: o.apparentHealth(), 
-          level: (o.livingState.damageMultiplier * 
-            o.livingState.healthMultiplier * o.livingState.damage * 
-            Math.sqrt(o.livingState.visRange>Math.sqrt(6*4)?
-              o.livingState.visRange:1)).toFixed(1)}
+          level: CreatureFactory.getMonsterLevel([o.name,o.livingState])
+            .toFixed(1)}
       }
       descriptor = JSON.stringify(props).replace(/"/g,'')
     }

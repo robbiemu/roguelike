@@ -35,6 +35,8 @@ class ControlsPreRedux extends React.Component {
   }
   
   handleKeypress (context, e) {
+    if (this.props.ui.winCondition === false)
+      return 
     let vector = '';
     switch (e.keyCode) {
       case 65: //a

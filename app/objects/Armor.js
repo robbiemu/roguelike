@@ -1,7 +1,7 @@
 import Item from './Item.js'
 
 export default class Armor extends Item {
-  constructor ({c=1}={}) {
+  constructor ({healthMultiplier=1}={}) {
     super(arguments[0])
     this.healthMultiplier=healthMultiplier
   }
