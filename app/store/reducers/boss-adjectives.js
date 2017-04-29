@@ -11,6 +11,7 @@ export default function () {
     'great',
     'herculean',
     'brilliant',
-    'retarded'
+    'retarded',
+    'bastard'
   ]
 }
