@@ -168,7 +168,9 @@ class ControlsPreRedux extends React.Component {
       coords.y >= context.props.dungeon.map[0].length)?
         undefined:
         context.props.dungeon.map[coords.x][coords.y]
-    if(mouseCell !== this.props.ui.mouseCell) {
+    if (mouseCell !== this.props.ui.mouseCell) {
+      if(mouseCell)
+        mouseCell.coords = coords
       store.dispatch({ reducer: 'ui', type: 'SET MOUSECELL', mouseCell })
       store.dispatch({ reducer: 'infoPanelKey', 
         type: 'SET KEY', key: Math.random() })    }

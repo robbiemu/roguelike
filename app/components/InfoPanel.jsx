@@ -70,7 +70,8 @@ export default class InfoPanelPreRedux extends React.Component {
   }
   
   render() { 
-    return <div className="info panel">{this.props.ui.mouseCell?
+    return <div className="info panel">{this.props.ui.mouseCell &&
+      this.props.ui.gameEngine.isVisible(this.props.ui.mouseCell.coords)?
     (<div>
       <span className="component surface">
         {Object.keys(Surfaces.arrayMap[this.props.ui.mouseCell.surface])[0]}
