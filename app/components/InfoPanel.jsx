@@ -34,6 +34,9 @@ export default class InfoPanelPreRedux extends React.Component {
     let descriptor, props
     if(o.isPossessable()) {
       switch(o.constructor.name){
+        case 'Armor':
+          props = { armor: o.healthMultiplier }
+          break
         case 'Weapon':
           props = {
             damage:o.damage.toFixed(3), 
@@ -81,7 +84,7 @@ export default class InfoPanelPreRedux extends React.Component {
         energy: {this.props.player.livingState.energy.toFixed(3)}</span>
       <span className="component weapon">
         weapon: {this.getWeaponOfPlayer()}</span>
-      <span className="component weapon">
+      <span className="component armor">
         armor: {this.props.player.livingState.healthMultiplier.toFixed(3)}</span>
     </div>)
   }
