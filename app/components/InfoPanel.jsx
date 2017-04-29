@@ -87,7 +87,10 @@ export default class InfoPanelPreRedux extends React.Component {
       <span className="component weapon">
         weapon: {this.getWeaponOfPlayer()}</span>
     </div>)
-    }</div> 
+  }
+  <div className="float-right level">Depth {this.props.dungeon.depth}</div>
+  {(this.props.player.hasKilledBoss?<div className="float-right can-ascend">you can ascend!</div>:'')}
+  </div> 
   }
 }
 

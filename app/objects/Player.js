@@ -59,7 +59,7 @@ export default class Player extends Creature {
     return damage
   }
   getDamage() { // so the way the above is written, it is better to reuse it
-    return this.getEffectiveDamage()
+    return this.getEffectiveDamage() * Math.random()
   }
   move(vector) {
     store.dispatch({reducer: 'dungeon', type: 'MOVE OBJECT', 

@@ -76,6 +76,8 @@ export default class GameEngine {
   }
   
   kill (o, position) {
+    if(o.i === Objects.indexOf('boss'))
+      store.getState().player.hasKilledBoss = true
     let map = store.getState().dungeon.map
     let corpse = new Container({
       inventory: o.inventory, 

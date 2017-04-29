@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import { store, mapStateToProps } from '../store/index.js'
 
+
+import RoomsSpec from '../map/RoomsSpec.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
@@ -61,11 +63,50 @@ class ControlsPreRedux extends React.Component {
   
   handleClick (position) {
     let {surface, objects} = this.props.dungeon.map[position.x][position.y]
+    let newRoomDims
     switch (surface) {
       case Surfaces.indexOf('stairs up'):
+        if(!Objects.areAdjacent(this.props.player, {position}) ||
+          (this.props.dungeon.depth === 0 && !this.props.player.hasKilledBoss)
+        )
+          return
+
+        store.dispatch({reducer: 'dungeon', type: 'SET DEPTH', 
+          depth:this.props.dungeon.depth - 1})
+
+        newRoomDims = Object.assign({}, RoomsSpec.defaultRoomSize)
+        newRoomDims.width += ~~(Math.random() * 2 - 1)
+        newRoomDims.height += ~~(Math.random() * 2 - 1)
+
+        store.dispatch({reducer: 'dungeon', type: 'SET DEFAULT ROOM', 
+          defaultRoomDimensions:newRoomDims})
+        store.dispatch({
+          reducer: 'infoPanelKey', 
+          type: 'SET KEY', 
+          key: Math.random()
+        })
+
+        this.props.nextLevel()
+        return
       case Surfaces.indexOf('stairs down'):
-        if(Objects.areAdjacent(this.props.player, {position}))
-          this.props.nextLevel()
+        if(!Objects.areAdjacent(this.props.player, {position}))
+          return
+        store.dispatch({reducer: 'dungeon', type: 'SET DEPTH', 
+          depth:this.props.dungeon.depth + 1})
+
+        newRoomDims = Object.assign({}, RoomsSpec.defaultRoomSize)
+        newRoomDims.width += ~~(Math.random() * 2 - 1)
+        newRoomDims.height += ~~(Math.random() * 2 - 1)
+
+        store.dispatch({reducer: 'dungeon', type: 'SET DEFAULT ROOM', 
+          defaultRoomDimensions:newRoomDims})
+        store.dispatch({
+          reducer: 'infoPanelKey', 
+          type: 'SET KEY', 
+          key: Math.random()
+        })
+
+        this.props.nextLevel()
         return
       /*default:
       case Surfaces.indexOf('unknown'): 

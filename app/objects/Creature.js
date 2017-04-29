@@ -59,7 +59,7 @@ export default class Creature extends Container {
     } else {
       damage = this.livingState.damage * this.livingState.damageMultiplier
     }
-    return damage
+    return damage * Math.random()
   }
   
   takeDamage (amount) {
