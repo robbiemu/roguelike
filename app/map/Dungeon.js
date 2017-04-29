@@ -12,5 +12,7 @@ export default class Dungeon {
     const rooms = RoomsGenerator.getRooms(this.depth)
     this.dg = new DungeonGenerator(this.depth, rooms, this.defaultRoomDimensions)
     this.map = this.dg.maze
+    this.visited = [...Array(this.map.length)]
+      .map(() => [...Array(this.map[0].length)])
   }
 }

@@ -2,7 +2,9 @@ import Container from './objects/Container.js'
 import Objects from './map/Objects.js'
 
 import { store } from './store/index.js'
+import { shadeBlendConvert } from './ColorUtils.js'
 
+const visitedColor = (hex) => shadeBlendConvert(-0.3,hex)
 
 export default class GameEngine {
   constructor({surfaces, objects, 
@@ -12,7 +14,9 @@ export default class GameEngine {
     this.objects = objects
   }
   draw () {
-    let map = store.getState().dungeon.map
+    let state = store.getState()
+    let map = state.dungeon.map
+    let visited = state.dungeon.visited
     let fw = this.ctx.canvas.width / map.length
     let fh = this.ctx.canvas.height / map[0].length
     fh = ~~(fh < fw? fh: fw)
@@ -22,10 +26,18 @@ export default class GameEngine {
     for (var i = 0; i < map.length; i++) {
       for (var j = 0; j < map[i].length; j++) {
         if(!this.isVisible({x:i,y:j})) {
-          this.ctx.beginPath()
-          this.ctx.fillStyle = this.surfaces.entryMap().unknown          
-          this.ctx.fillRect(i * fw, j * fh, fw, fh)
-          this.ctx.closePath()
+          if(visited[i][j]) {
+            this.ctx.beginPath()
+            this.ctx.fillStyle = visitedColor(Object.values(
+              this.surfaces.arrayMap[map[i][j].surface])[0])         
+            this.ctx.fillRect(i * fw, j * fh, fw, fh)
+            this.ctx.closePath()
+          } else {
+            this.ctx.beginPath()
+            this.ctx.fillStyle = this.surfaces.entryMap().unknown          
+            this.ctx.fillRect(i * fw, j * fh, fw, fh)
+            this.ctx.closePath()
+          }
         } else {
           this.ctx.beginPath()
           this.ctx.fillStyle = Object.values(
@@ -51,7 +63,13 @@ export default class GameEngine {
     let map = state.dungeon.map
     let fov = state.dungeon.dg.fov
     let player = state.player
-    return fov.isVisibleTo(player, coords)
+    let res = fov.isVisibleTo(player, coords)
+    fov.contextMap.forEach((row,x) => 
+      row.forEach((c,y) => {
+        if(c.visible)
+          state.dungeon.visited[x][y]=true
+      }))
+    return res
   }
   
   turnCycle () {

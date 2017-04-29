@@ -12,7 +12,8 @@ export default {
       })[0]
       rooms.push(type)
     }
-    console.log('>> rooms set generated', rooms)
+    console.log('>> rooms set generated', 
+      JSON.stringify(rooms).replace(/"/g,''))
     return rooms
   }
 }
