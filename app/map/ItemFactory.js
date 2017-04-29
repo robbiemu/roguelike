@@ -56,7 +56,7 @@ export default {
     })
   },
   getWeapon: (depth) => {
-    let multipliable = Math.random() > 1/(depth+1)
+    let multipliable = (Math.random() < 1/(depth+1)) || Math.random() > 0.5
     let damage = multipliable? 0.5: 0
     let c = depth+1
     while(c-->0){

@@ -49,11 +49,11 @@ function getItems (depth) {
   while((chance+=1+Math.random() * 10) < depth+2) {
     const roll = Math.random()
     let item
-    if (roll > (3/4.0)) {
-      item = ItemFactory.getPotion(depth)
-    } else if (roll > 0.5) {
+    if (roll > 0.9) {
       item = ItemFactory.getFood(depth)
-    } else if (roll > (1/4.0)) {
+    } else if (roll > 0.6) {
+      item = ItemFactory.getPotion(depth)
+    } else if (roll > 0.3) {
       item = ItemFactory.getArmor(depth)
     } else {
       item = ItemFactory.getWeapon(depth)

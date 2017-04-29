@@ -19,11 +19,13 @@ export default Object.assign({}, OrderedMap, {
     Spawner: 'source',
     Monster: 'creature',
     Treasure: () => {
-      let c = Math.random()
-      if(c < 1/3.0) {
+      const roll = Math.random()
+      if (roll > 0.9) {
         return 'food'
-      } else if (c < 2/3.0) {
+      } else if (roll > 0.6) {
         return 'potion'
+      } else if (roll > 0.3) {
+        return 'armor'
       } else {
         return 'weapon'
       }
