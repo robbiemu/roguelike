@@ -92,8 +92,10 @@ class ControlsPreRedux extends React.Component {
         return
       default: //ATTACK
         if(Objects.areAdjacent(this.props.player, {position}) || 
-            (this.props.player.weapon && this.props.player.weapon.isRanged())) {
-          this.props.ui.gameEngine.processAttack({from:this.props.player, to:action})
+            (this.props.player.livingState.weapon && 
+            this.props.player.livingState.weapon.isRanged())) {
+          this.props.ui.gameEngine
+            .processAttack({from:this.props.player, to:action})
           this.props.ui.gameEngine.turnCycle()
         }
     }
@@ -123,6 +125,7 @@ class ControlsPreRedux extends React.Component {
       x:~~(mousePos.x/context.props.ui.squareSize), 
       y:~~(mousePos.y/context.props.ui.squareSize)
     }
+    // if it is in the map, get the map cell clicked
     mousePos = (coords.x >= context.props.dungeon.map.length || 
       coords.y >= context.props.dungeon.map[0].length)?
         undefined:

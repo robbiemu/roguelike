@@ -81,7 +81,7 @@ export default class InfoPanelPreRedux extends React.Component {
     </div>):
     (<div>
       <span className="component health">
-        health: {this.props.player.livingState.health.toFixed(3)}</span>
+        health: {this.props.player.apparentHealth()}</span>
       <span className="component energy">
         energy: {this.props.player.livingState.energy.toFixed(3)}</span>
       <span className="component weapon">

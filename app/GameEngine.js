@@ -21,7 +21,7 @@ export default class GameEngine {
 
     for (var i = 0; i < map.length; i++) {
       for (var j = 0; j < map[i].length; j++) {
-        if(!this.isVisible(map[i][j])) {
+        if(!this.isVisible({x:i,y:j})) {
           this.ctx.beginPath()
           this.ctx.fillStyle = this.surfaces.entryMap().unknown          
           this.ctx.fillRect(i * fw, j * fh, fw, fh)
@@ -46,7 +46,13 @@ export default class GameEngine {
       }
     }
   }
-  isVisible(){return true}
+  isVisible(coords){
+    let state = store.getState()
+    let map = state.dungeon.map
+    let fov = state.dungeon.dg.fov
+    let player = state.player
+    return fov.isVisibleTo(player, coords)
+  }
   
   turnCycle () {
     let map = store.getState().dungeon.map

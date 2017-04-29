@@ -10,7 +10,7 @@ export default class Item extends Thing {
       byWhom.livingState.inventory.push(this)
     }
   }
-  giveToPlayer() {
-   // no-op
+  giveToPlayer(bywhom) { // override this
+   byWhom.livingState.inventory.push(this)
   }
 }

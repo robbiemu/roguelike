@@ -1,11 +1,12 @@
 /* taken from npm dungeongenerator (currently broken there, but essentially 
 useful): https://github.com/nerox8664/dungeongenerator/blob/master/src/dungeon.js
 */
-
 import RoomsSpec from './RoomsSpec.js'
 
 import Surfaces from './Surfaces.js'
 import Objects from './Objects.js'
+
+import FoV from './FoV.js'
 
 import { store } from '../store/index.js'
 
@@ -56,6 +57,8 @@ export default class DungeonGenerator {
     })
     let maze = [...Array(maxwidth)].map(()=> [...Array(maxheight+1)])
     this.maze = maze.map((r,x) => r.map((c,y) => this.maze[x][y] ))
+
+    this.fov = new FoV(this.maze)
   }
   
   setSpawn() {

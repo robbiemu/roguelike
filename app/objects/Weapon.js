@@ -17,7 +17,7 @@ export default class Weapon extends Item {
           this.damage * (this.multipliable?
             player.livingState.damageMultiplier:1)) ||
         (player.livingState.weapon.mutliable !== this.multipliable))
-      player.weapon=this
+      player.livingState.weapon=this
   }
   isRanged () { return !this.multipliable }
 }
