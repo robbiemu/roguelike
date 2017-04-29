@@ -5,8 +5,6 @@ import { store } from '../store/index.js'
 export default class Player extends Creature {
   constructor(opts) {
       opts.automated=false
-      opts.damageMultiplier=100
-      opts.healthMultiplier=100
       super(opts)
 
       let set = (t,p,v) => {

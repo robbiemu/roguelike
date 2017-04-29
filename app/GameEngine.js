@@ -61,13 +61,9 @@ export default class GameEngine {
         .filter(o => !o.isPossessable() && o.hasTurn() )
         .forEach(o => {
           o.processTurn(this, map)
-          if (o.isDead()) {
-            if (o.isPlayer()) {
-              
-            } else {
-              console.log(`${o.name} is dead!`)
-              this.kill(o, {x:ri, y:ci})
-            }
+          if (o.isDead() && !o.isPlayer()) { // player watches their own death for game state
+            console.log(`${o.name} is dead!`)
+            this.kill(o, {x:ri, y:ci})
           }
         }))
     })
@@ -106,6 +102,13 @@ export default class GameEngine {
         toTile.objects.forEach(o => { // get items now
           if(o.isPossessable())
             creature.take(o)
+          if(o.constructor.name === 'Container' && creature.isPlayer())
+            o.inventory = o.inventory.map(i => {
+              if(!i.isPossessable())
+                return i
+              creature.take(i)
+              return null
+            }).filter(x => x !== null)
         })
         toTile.objects=toTile.objects.filter(o => !o.isPossessable())        
 //        toTile.objects.unshift(creature)

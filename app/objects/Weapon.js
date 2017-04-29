@@ -1,7 +1,5 @@
 import Item from './Item.js'
 
-import { store } from '../store/index.js'
-
 export default class Weapon extends Item {
   constructor ({damage, multipliable=true}={}) {
     super(arguments[0])

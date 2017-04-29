@@ -33,7 +33,6 @@ class GamePreRedux extends React.Component {
   }
 
   initGame() {
-    console.log(this)
     store.dispatch({reducer: 'ui', type: 'SET WIN CONDITION', 
       condition: undefined})
     this.cyclePlayer()

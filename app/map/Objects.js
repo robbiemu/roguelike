@@ -11,7 +11,8 @@ export default Object.assign({}, OrderedMap, {
     {food: '#449900'},
     {potion: '#6600ff'},
     {weapon: '#ffff00'},
-    {source: '#0000ff'}
+    {source: '#0000ff'},
+    {armor: '#333333'}
   ],
   altNames: {
     Boss: 'boss',
@@ -34,6 +35,7 @@ export default Object.assign({}, OrderedMap, {
     source: (depth) => CreatureFactory.getSpawner(depth),
     food: (depth) => ItemFactory.getFood(depth),
     potion: (depth) => ItemFactory.getPotion(depth),
+    armor: (depth) => ItemFactory.getArmor(depth),
     weapon: (depth) => ItemFactory.getWeapon(depth),
   },
   areAdjacent: (l,r) => (Math.abs(l.position.x - r.position.x) <= 1) && 

@@ -19,7 +19,6 @@ export default function (state=ui, action) {
       ui.squareSize = action.squareSize
       break
     case 'SET WIN CONDITION':
-      console.log('set win condition', action.condition)
       ui.winCondition = action.condition
       break
     default:

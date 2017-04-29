@@ -50,7 +50,7 @@ export default class InfoPanelPreRedux extends React.Component {
       descriptor = JSON.stringify(props).replace(/"/g,'')
     } else if(!o.isPlayer()) {
       if (o.constructor.name === 'Container') {
-        props = { inventory: o.inventory }
+        props = { inventory: o.inventory.map(i=>i.name) }
       } else {
         props = { health: o.apparentHealth(), 
           level: (o.livingState.damageMultiplier * 
@@ -82,6 +82,8 @@ export default class InfoPanelPreRedux extends React.Component {
         energy: {this.props.player.livingState.energy.toFixed(3)}</span>
       <span className="component weapon">
         weapon: {this.getWeaponOfPlayer()}</span>
+      <span className="component weapon">
+        armor: {this.props.player.livingState.healthMultiplier.toFixed(3)}</span>
     </div>)
   }
   <div className="float-right level">Depth {this.props.dungeon.depth}</div>

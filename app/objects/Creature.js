@@ -112,7 +112,7 @@ export default class Creature extends Container {
       {x:0,y:-1},
       {x:1,y:1},
       {x:-1,y:1},
-      {x:1,y:1},
+      {x:-1,y:-1},
       {x:1,y:-1}
     ]
     if (
@@ -188,7 +188,8 @@ export default class Creature extends Container {
   }
   
   take(o) {
-    store.dispatch({reducer: 'dungeon', type: 'REMOVE OBJECT', object:o})
+    if(o.position.x && o.position.y)
+      store.dispatch({reducer: 'dungeon', type: 'REMOVE OBJECT', object:o})
     o.position = {x:undefined, y:undefined}
     o.possess(this)
   }
