@@ -159,7 +159,8 @@ export default class Creature extends Container {
   
   healPerTurn () {
     if(this.livingState.health < this.livingState.energy){
-      let x = this.livingState.health - this.livingState.energy
+      let x = Math.random() * (this.livingState.health - 
+        this.livingState.energy)
       let amount = x < 0.0027 && x > 0 && this.livingState.health < 0? x: 0.0027
       this.livingState.health += amount
     }
