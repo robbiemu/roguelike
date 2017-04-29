@@ -33,13 +33,13 @@ const armors = [
 export default {
   getFood: (depth) => new Food({
     name:'food', 
-    health:1/(depth>26?1:26-depth), 
-    turnsRemaining:2*(depth+1)
+    health:0.8/(depth>=26?1:26-depth)+Math.random()*0.2/(depth>=26?1:26-depth), 
+    turnsRemaining:Math.ceil(Math.random()*depth)+10
   }),
   getPotion: (depth) => new Potion({
     name:'potion', 
-    energy:1/(depth>26?1:26-depth), 
-    turnsRemaining:~~Math.sqrt(depth)+1
+    energy:2/(depth>=26?1:26-depth), 
+    turnsRemaining:Math.ceil(Math.random()*(Math.sqrt(depth)+1))
   }),
   getArmor: (depth) => {
     let healthMultiplier = 0
@@ -62,7 +62,8 @@ export default {
     while(c-->0){
       let max = ((1-damage)/2)+damage
       let min = damage
-      damage += Math.random()*(max-min)
+      //damage += Math.random()*(max-min)
+      damage += (Math.random()*(max-min))/(multipliable?2:4)
     }
     
     return new Weapon({
