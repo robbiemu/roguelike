@@ -26,6 +26,12 @@ canvas, header > h1 {
   margin: 1rem;
 }
 
+header > h1 > small {
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-family: sans-serif;
+}
+
 .disabled {
   display: none !important;
 }

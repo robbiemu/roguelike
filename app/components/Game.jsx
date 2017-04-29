@@ -59,8 +59,8 @@ class GamePreRedux extends React.Component {
 
   resizeCanvas (context) {
     let parentSize = context.refs.map.parentNode.getBoundingClientRect();
-    context.refs.map.width = parentSize.width - 25 // cludge but it works
-    context.refs.map.height = parentSize.height - 210
+    context.refs.map.width = parentSize.width - 35 // cludge but it works
+    context.refs.map.height = parentSize.height - 255
 
     context.props.ui.gameEngine.draw()
   }

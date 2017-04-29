@@ -130,7 +130,7 @@ export default class Creature extends Container {
   }
   
   consumeEnergyPerTurn () {
-    this.livingState.energy -= 	1 / 2632
+    this.livingState.energy -= 	1 / 1316
     if(this.livingState.energy < -1)
       this.livingState.energy = -1
   }
