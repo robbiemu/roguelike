@@ -1,12 +1,27 @@
+import Objects from './Objects.js'
+
 import Creature from '../objects/Creature.js'
+import Spawner from '../objects/Spawner.js'
 
 import { store } from '../store/index.js'
 import { atRandom } from '../ArrayUtils.js'
 
 export default {
   getBoss: (depth) => new Creature(getBoss(depth)),
-  getMonster: (depth) => new Creature(getMonster(depth)),
-  getSpawner: (depth) => new Creature({name:'spawner'})
+  getMonster: (depth) => new Creature(getMonster(depth, true)),
+  getSpawner: (depth) => new Spawner({
+    name:'spawner', 
+    spawnType: getMonster(depth,true),
+    spawnChance: 0.1,
+    spawnFunction: ((where, what) => {
+      let object = new Creature(what)
+      object.position = where
+      object.i = Objects.indexOf('creature')
+      store.dispatch({reducer:'dungeon', type: 'PLACE OBJECT', position: where,
+        object})
+    }),
+    inventory:getItems(depth)
+  })
 }
 
 function getBossName() {
@@ -26,13 +41,17 @@ function getBoss(depth) {
   }
 }
 
-function getMonster(depth) {
+function getItems (depth) {
+  return []
+}
+
+function getMonster(depth, withoutItems) {
   let monsters = store.getState().monsters
   let selection = {}
   Object.entries(monsters)
-    .filter(e => Object.entries(e[1])
-      .reduce((p,c) => c[0]==='visRange'? p*Math.sqrt(c[1]) : p*c[1], 1) 
-      - 1 <= depth)
+    .filter(e => Object.entries(e[1]).reduce((p,c) => 
+      p * (c[1]/ Creature.defaultLevelParameters[c[0]]), 1)**2
+      <= depth+1+(Math.random() * 2 - 1))
     .forEach(e => selection[e[0]]=e[1])
 
   let keys = Object.keys(selection)
@@ -40,6 +59,9 @@ function getMonster(depth) {
   
   let monster = Object.assign({}, selection[key])
   monster.name = key
+
+  if(!withoutItems)
+    monster.inventory = getItems(depth)
 
   return monster
 }

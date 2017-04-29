@@ -10,6 +10,10 @@ export default function (state=player, action) {
     case 'NEW':
       player = new Player(Object.assign({name}, action.options))
       break
+    case 'NOTE CURRENT DEPTH':
+      player.maxDepth = player.maxDepth > action.depth? 
+        player.maxDepth : action.depth
+      break
     case 'MOVE':
       player.position.x += action.vector.x
       player.position.y += action.vector.y

@@ -11,13 +11,13 @@ import Objects from '../map/Objects.js'
 
 import InfoPanel from './InfoPanel.jsx'
 import Controls from './Controls.jsx'
+import WinCondition from './WinCondition.jsx'
 
 class GamePreRedux extends React.Component {
   constructor (props) {
     super (props)
 
-    store.dispatch({reducer: 'player', type: 'NEW'})
-    this.cycleMap()
+    this.initGame()
        
     this.state = {
       settings: {
@@ -27,11 +27,35 @@ class GamePreRedux extends React.Component {
     }
   }
 
+  newGame() {
+    this.initGame()
+    this.nextLevel()
+  }
+
+  initGame() {
+    console.log(this)
+    store.dispatch({reducer: 'ui', type: 'SET WIN CONDITION', 
+      condition: undefined})
+    this.cyclePlayer()
+    this.cycleMap()
+    store.dispatch({reducer: 'dungeon', type: 'SET DEPTH', depth:0})
+    store.dispatch({reducer: 'player', type: 'NOTE CURRENT DEPTH', depth: 0})
+    store.dispatch({
+      reducer: 'infoPanelKey', 
+      type: 'SET KEY', 
+      key: Math.random()
+    })
+  }
+
   cycleMap () {
     store.dispatch({reducer: 'dungeon', type: 'GENERATE MAP'})
     store.dispatch({reducer: 'dungeon', type: 'SET SPAWN LOCATION'})
     let position = this.props.dungeon.spawnPosition
     store.dispatch({reducer: 'player', type: 'SET POSITION', position})
+  }
+
+  cyclePlayer () {
+    store.dispatch({reducer: 'player', type: 'NEW'})
   }
 
   resizeCanvas (context) {
@@ -43,7 +67,6 @@ class GamePreRedux extends React.Component {
   }
 
   nextLevel () {
-    console.log(this)
     this.cycleMap()
     this.nextGameEngine()
     
@@ -62,6 +85,7 @@ class GamePreRedux extends React.Component {
         <InfoPanel />
         <canvas ref="map" id="map" />
         <Controls ref="controls" canvasID="map" nextLevel={this.nextLevel.bind(this)} />
+        <WinCondition newGame={this.newGame.bind(this)} />
       </div>
     ) 
   }

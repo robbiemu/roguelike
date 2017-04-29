@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 
 import { store, mapStateToProps } from '../store/index.js'
 
-
 import RoomsSpec from '../map/RoomsSpec.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
+
+import Creature from '../objects/Creature.js'
+import Spawner from '../objects/Spawner.js'
 
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect()
@@ -70,6 +72,9 @@ class ControlsPreRedux extends React.Component {
           (this.props.dungeon.depth === 0 && !this.props.player.hasKilledBoss)
         )
           return
+        if(this.props.dungeon.depth === 0 && this.props.player.hasKilledBoss)
+          store.dispatch({ reducer: 'ui', 
+            type: 'SET WIN CONDITION', condition:true })
 
         store.dispatch({reducer: 'dungeon', type: 'SET DEPTH', 
           depth:this.props.dungeon.depth - 1})
@@ -91,8 +96,9 @@ class ControlsPreRedux extends React.Component {
       case Surfaces.indexOf('stairs down'):
         if(!Objects.areAdjacent(this.props.player, {position}))
           return
-        store.dispatch({reducer: 'dungeon', type: 'SET DEPTH', 
-          depth:this.props.dungeon.depth + 1})
+        let depth = this.props.dungeon.depth + 1
+        store.dispatch({reducer: 'dungeon', type: 'SET DEPTH', depth})
+        store.dispatch({reducer: 'player', type: 'NOTE CURRENT DEPTH', depth})
 
         newRoomDims = Object.assign({}, RoomsSpec.defaultRoomSize)
         newRoomDims.width += ~~(Math.random() * 2 - 1)
@@ -108,28 +114,35 @@ class ControlsPreRedux extends React.Component {
 
         this.props.nextLevel()
         return
-      /*default:
+      /*default:*/
       case Surfaces.indexOf('unknown'): 
-        return*/
+        return
     }
     
     let action =
     objects.reduce((p,c) => {
       switch(c.constructor.name) {
         case 'Creature':
+        case 'Spawner':
           return c
         case 'Weapon':
         case 'Potion':
         case 'Food':
-          return p instanceof Creature? p: 'MOVE'
+          return (p instanceof Creature || p instanceof Spawner)? p: 'MOVE'
+        default:
+          return p
       }
     }, 'NOTHING')
+
     switch (action) {
       case 'NOTHING':
-        return
       case 'MOVE':
-        if(Objects.areAdjacent(this.props.player, {position}))
-          gameEngine.handleMove(this.props.player, position)
+        if(Objects.areAdjacent(this.props.player, {position})) {
+          let dest = Object.assign({}, position)
+          dest.x = position.x - this.props.player.position.x
+          dest.y = position.y - this.props.player.position.y
+          this.props.ui.gameEngine.handleMove(this.props.player, dest)
+        }
         return
       default: //ATTACK
         if(Objects.areAdjacent(this.props.player, {position}) || 

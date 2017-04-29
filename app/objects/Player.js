@@ -5,6 +5,8 @@ import { store } from '../store/index.js'
 export default class Player extends Creature {
   constructor(opts) {
       opts.automated=false
+      opts.damageMultiplier=100
+      opts.healthMultiplier=100
       super(opts)
 
       let set = (t,p,v) => {
@@ -36,6 +38,9 @@ export default class Player extends Creature {
           type: 'SET KEY', 
           key: Math.random()
         })
+        if(p === 'health' && v < -1)
+          store.dispatch({ reducer: 'ui', type: 'SET WIN CONDITION', 
+            condition: false})
 
         return true
       }

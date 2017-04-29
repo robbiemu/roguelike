@@ -91,10 +91,13 @@ export default class GameEngine {
   }
   
   handleMove (creature, vector) {
-    let map = store.getState().dungeon.map
-
     let fro = creature.position
-    let toTile = map[fro.x+vector.x][fro.y+vector.y]
+    let to = {x:fro.x+vector.x, y:fro.y+vector.y}
+    let map = store.getState().dungeon.map
+    if(to.x < 0 || to.y < 0 || to.x >= map.length || to.y >= map[0].length)
+      return // nothing doing
+
+    let toTile = map[to.x][to.y]
     if(toTile.surface) { // if the surface index != 0 (UNKNOWN), then we can move there
       if(toTile.objects.every(o => o.isPossessable() || 
           o.constructor.name === 'Container')) {

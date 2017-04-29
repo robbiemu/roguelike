@@ -119,7 +119,7 @@ export default class Creature extends Container {
       vectors.some(p => {
         let x = this.position.x + p.x
         let y = this.position.y + p.y
-        return (x>=0 && y>=0)?
+        return (x>=0 && y>=0 && x < map.length && y < map[0].length)?
           (map[x][y].objects.indexOf(player) !== -1):
           false
       })
@@ -192,4 +192,11 @@ export default class Creature extends Container {
     o.position = {x:undefined, y:undefined}
     o.possess(this)
   }
+}
+
+Creature.defaultLevelParameters = {
+  damage:0.5,
+  healthMultiplier:1,
+  damageMultiplier:1,
+  visRange:Math.sqrt(6*4)
 }

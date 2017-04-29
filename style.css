@@ -2,6 +2,7 @@
 
 :root {
   font-size: 12px;
+  user-select: none
 }
 
 .styleable-html-element, html > body, body > main {
@@ -21,14 +22,38 @@ main, .map.container, #app {
   flex: 1;
 }
 
+canvas, header > h1 {
+  margin: 1rem;
+}
+
+.disabled {
+  display: none !important;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(0,0,0,0.5)
+}
+
+.modal .message {
+  background-color: black;
+  padding: 2rem;
+  border-radius: 0.3rem;
+  border: solid thin #111;
+}
+
 .panel {
   margin: 1rem;
   border: solid thin white;
   padding: 1rem;
-}
-
-canvas, header > h1 {
-  margin: 1rem;
 }
 
 .component:not(:first-child) {
@@ -38,8 +63,8 @@ canvas, header > h1 {
 .float-right { float: right }
 
 .can-ascend {
-  margin-top: -1.2rem;
-  padding-right: 1rem;
+  margin-top: -1.3rem;
+  padding-right: 6rem;
   font-style: italic;    
 }
 

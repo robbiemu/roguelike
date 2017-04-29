@@ -1,4 +1,9 @@
-let ui={ mouseCell:undefined, gameEngine: undefined, squareSize:undefined }
+let ui={ 
+  mouseCell:undefined,
+  gameEngine: undefined,
+  squareSize:undefined, 
+  winCondition: undefined
+}
 
 export default function (state=ui, action) {
   if(action.reducer !== 'ui')
@@ -12,6 +17,11 @@ export default function (state=ui, action) {
       break
     case 'SET SQUARE SIZE':
       ui.squareSize = action.squareSize
+      break
+    case 'SET WIN CONDITION':
+      console.log('set win condition', action.condition)
+      ui.winCondition = action.condition
+      break
     default:
       return state
   }
