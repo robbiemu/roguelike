@@ -107,8 +107,7 @@ export default class GameEngine {
   moveTowardDest (creature, dest) {
     let map = store.getState().dungeon.map
     let path = this.plotPath(creature, dest)
-    if (path.length>0 && 
-      !creature.isPlayer() && 
+    if (path.length>0 &&  
       !((path[1][0] === dest.x) && (path[1][1]===dest.y)) &&
       !map[path[1][0]][path[1][1]].objects.some(o => o.hasTurn())
     )
