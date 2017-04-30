@@ -69,13 +69,17 @@ class ControlsPreRedux extends React.Component {
     let {surface, objects} = this.props.dungeon.map[position.x][position.y]
     let newRoomDims
 
+/* pathfinding movement */
     if (!Objects.areAdjacent(this.props.player, {position}) && 
-        [Surfaces.indexOf('passage'), Surfaces.indexOf('room')].includes(
-          this.props.dungeon.map[position.x][position.y].surface) &&
+        this.props.dungeon.map[position.x][position.y].surface &&
+        !this.props.player.isSeeingDanger(
+          this.props.dungeon.dg.fov.getVisible(this.props.player),
+          this.props.dungeon.map) &&
         (this.props.ui.gameEngine.isVisible(position) || 
         this.props.dungeon.visited[position.x][position.y])) {
-      this.props.ui.gameEngine.moveToDest(this.props.player, position)
+      this.props.ui.gameEngine.moveTowardDest(this.props.player, position)
       this.props.ui.gameEngine.turnCycle()
+      return
     }
 
     switch (surface) {

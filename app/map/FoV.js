@@ -18,6 +18,7 @@ export default class FoV {
       .map(r => [...Array(this.map[0].length)].map(c => {return {}}))    
     this.fov.compute(creature.position.x, creature.position.y,
       ~~creature.livingState.visRange, this.setVisible.bind(this))
+    return this.contextMap
   }
   isVisibleTo (creature, position) {
     this.getVisible(creature)
