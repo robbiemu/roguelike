@@ -135,8 +135,8 @@ export default class GameEngine {
     var grid = new PF.Grid(map.length, map[0].length)
 
     map.forEach((r,x) => r.forEach((c,y) => {
-      if(creature.isAdjacentTo({position:{x,y}}) && 
-          c.objects.some(o => o.hasTurn()) || !c.surface)
+      if((creature.isAdjacentTo({position:{x,y}}) && 
+          c.objects.some(o => o.hasTurn())) || !c.surface)
         grid.setWalkableAt(x, y, false);
     }))
 
