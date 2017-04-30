@@ -5,4 +5,5 @@ export default class Thing {
     this.name=name
   }
   isPlayer() { return false }
+  hasTurn() { return false }
 }
