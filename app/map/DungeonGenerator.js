@@ -21,7 +21,7 @@ export default class DungeonGenerator {
     // randomize map dimensions, but keep them from being too long/narrow
     let [x,y] = [(Math.random()+Math.random())/2, (Math.random()+Math.random())/2]
     let s = Math.sqrt(
-      ~~(rooms.length * roomSize.width * roomSize.height * (1/0.8)));
+      ~~(rooms.length * roomSize.width * roomSize.height * (1/0.667)));
     [x,y] = [~~(s * (x/y)), ~~(s * (y/x))]
     this.w = (x < (roomSize.width*Math.sqrt(rooms.length)))? 
       ~~(roomSize.width*Math.sqrt(rooms.length)): x
