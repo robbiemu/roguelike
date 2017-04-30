@@ -4,9 +4,9 @@ export default {
     Up:  0.1,
     Down: 0.1,
     Boss: 0.025,
-    Spawner: 0.1,
+    Spawner: 0.075,
     Monster: 0.2,
-    Treasure: 0.125
+    Treasure: 0.15
   },
   required: ['Up','Down'],
   defaultType: 'Empty',
