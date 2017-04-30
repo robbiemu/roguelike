@@ -68,6 +68,16 @@ class ControlsPreRedux extends React.Component {
   handleClick (position) {
     let {surface, objects} = this.props.dungeon.map[position.x][position.y]
     let newRoomDims
+
+    if (!Objects.areAdjacent(this.props.player, {position}) && 
+        [Surfaces.indexOf('passage'), Surfaces.indexOf('room')].includes(
+          this.props.dungeon.map[position.x][position.y].surface) &&
+        (this.props.ui.gameEngine.isVisible(position) || 
+        this.props.dungeon.visited[position.x][position.y])) {
+      this.props.ui.gameEngine.moveToDest(this.props.player, position)
+      this.props.ui.gameEngine.turnCycle()
+    }
+
     switch (surface) {
       case Surfaces.indexOf('stairs up'):
         if(!Objects.areAdjacent(this.props.player, {position}) ||
