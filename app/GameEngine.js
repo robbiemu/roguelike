@@ -17,6 +17,7 @@ export default class GameEngine {
     this.finder = new PF.AStarFinder({
       allowDiagonal: true
     })
+    this.turn=0
   }
   draw () {
     let state = store.getState()
@@ -86,12 +87,13 @@ export default class GameEngine {
   }
   
   turnCycle () {
+    this.turn++
     let map = store.getState().dungeon.map
     map.forEach((row, ri) => {
       row.forEach((cel, ci) => cel.objects
         .filter(o => !o.isPossessable() && o.hasTurn() )
         .forEach(o => {
-          o.processTurn()
+          o.processTurn(this.turn)
           if (o.isDead() && !o.isPlayer()) { // player watches their own death for game state
             console.log(`${o.name} is dead!`)
             this.kill(o, {x:ri, y:ci})
@@ -103,10 +105,13 @@ export default class GameEngine {
   }
 
   moveTowardDest (creature, dest) {
+    let map = store.getState().dungeon.map
     let path = this.plotPath(creature, dest)
-    if (path)
-      if(!creature.isPlayer())
-        console.log('creature wants to move ', path)
+    if (path && 
+      !creature.isPlayer() && 
+      !((path[1][0] === dest.x) && (path[1][1]===dest.y)) &&
+      !map[path[1][0]][path[1][1]].objects.some(o => o.hasTurn())
+    )
       creature.move({
         x: path[1][0] - creature.position.x, 
         y: path[1][1] - creature.position.y

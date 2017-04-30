@@ -53,14 +53,14 @@ export default class Creature extends Container {
   }
 
   move(vector) {
-    this.position.x = this.position.x + vector.x
-    this.position.y = this.position.y + vector.y
     store.dispatch({
       reducer: 'dungeon', 
       type: 'MOVE OBJECT', 
       object:this, 
       vector
     })
+    this.position.x = this.position.x + vector.x
+    this.position.y = this.position.y + vector.y
   }
 
   getDamage () {
@@ -101,7 +101,12 @@ export default class Creature extends Container {
     return 'should be dead now'
   }
   
-  processTurn () {
+  processTurn (turn) {
+    if((this.turn === turn) && !this.isPlayer()) {
+      console.log('skipping repeated turns for movement')
+      return
+    }
+    this.turn = turn
     this.consumeEnergyPerTurn()
     this.processEnergyBuffs()
     this.processEnergyDebuffs()
@@ -123,10 +128,11 @@ export default class Creature extends Container {
     let map = state.dungeon.map
     let fov = state.dungeon.dg.fov
     let gameEngine = state.ui.gameEngine
+    let fovres = fov.safelyGetVisible(this)
 
     if (this.isAdjacentTo(player)) {
       gameEngine.processAttack({from:this, to:player})
-    }/* else if (this.isSeeingDanger(fov.getVisible(this),map)) {
+    } else if (this.isSeeingDanger(fovres, map)) {
       console.log('ok, so moving')
       if(this.livingState.health > -0.68) {
         // move towards player
@@ -135,7 +141,7 @@ export default class Creature extends Container {
         // move away from player
         gameEngine.moveAwayFrom(this, player)
       }
-    }*/
+    }
     return
   }
 

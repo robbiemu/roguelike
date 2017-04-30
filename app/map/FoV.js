@@ -20,6 +20,17 @@ export default class FoV {
       ~~creature.livingState.visRange, this.setVisible.bind(this))
     return this.contextMap
   }
+  safelyGetVisible (creature) {
+    let contextMapFrom = this.contextMap.map(r => r.map(c =>
+      Object.assign({}, c)
+    )) 
+    this.getVisible(creature)
+    let contextMap = this.contextMap.map(r => r.map(c =>
+      Object.assign({}, c)
+    ))
+    this.contextMap = contextMapFrom
+    return contextMap
+  }
   isVisibleTo (creature, position) {
     this.getVisible(creature)
     return this.contextMap[position.x][position.y].visible    
