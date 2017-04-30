@@ -40,7 +40,15 @@ export default class Creature extends Container {
   
   isPossessable () { return false }
 
-  
+  isSeeingDanger (fovres, map) {
+    return fovres.some((r,x) => r.some((c,y) => {
+      if (c.visible && map[x][y].objects.some(o => 
+          o instanceof Creature && o.isPlayer() !== this.isPlayer())) {
+        return true
+      }
+    }))
+  }
+
   move(vector) {
     store.dispatch({
       reducer: 'dungeon', 

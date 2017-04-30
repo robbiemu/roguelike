@@ -1,3 +1,5 @@
+import PF from 'pathfinding'
+
 import Container from './objects/Container.js'
 import Objects from './map/Objects.js'
 
@@ -12,6 +14,9 @@ export default class GameEngine {
     this.ctx = ctx
     this.surfaces = surfaces
     this.objects = objects
+    this.finder = new PF.AStarFinder({
+      allowDiagonal: true
+    })
   }
   draw () {
     let state = store.getState()
@@ -95,6 +100,34 @@ export default class GameEngine {
     })
 
     this.draw()
+  }
+
+  moveToDest (creature, dest) {
+    let path = this.plotPath(creature, dest)
+    console.log('path that was determined: ', path)
+    if (path)
+      creature.move({
+        x:path[1][0]-creature.position.x, 
+        y: path[1][1]-creature.position.y
+      })
+  }
+
+  plotPath (creature, dest) {
+    let state = store.getState()
+    let map = state.dungeon.map
+
+    if(!map[dest.x][dest.y].surface)
+      return undefined
+
+    var grid = new PF.Grid(map.length, map[0].length)
+
+    map.forEach((r,x) => r.forEach((c,y) => {
+      if(!c.surface)
+        grid.setWalkableAt(x, y, false);
+    }))
+
+    return this.finder.findPath(creature.position.x, creature.position.y, 
+      dest.x, dest.y, grid)
   }
   
   kill (o, position) {
