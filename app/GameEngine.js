@@ -129,13 +129,14 @@ export default class GameEngine {
     let state = store.getState()
     let map = state.dungeon.map
 
-    if(!map[dest.x][dest.y].surface)
+    if(!map[dest.x][dest.y].surface || creature.isAdjacentTo({position: dest}))
       return undefined
 
     var grid = new PF.Grid(map.length, map[0].length)
 
     map.forEach((r,x) => r.forEach((c,y) => {
-      if(!c.surface)
+      if(creature.isAdjacentTo({position:{x,y}}) && 
+          c.objects.some(o => o.hasTurn()) || !c.surface)
         grid.setWalkableAt(x, y, false);
     }))
 

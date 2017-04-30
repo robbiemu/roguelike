@@ -102,10 +102,8 @@ export default class Creature extends Container {
   }
   
   processTurn (turn) {
-    if((this.turn === turn) && !this.isPlayer()) {
-      console.log('skipping repeated turns for movement')
+    if((this.turn === turn) && !this.isPlayer())
       return
-    }
     this.turn = turn
     this.consumeEnergyPerTurn()
     this.processEnergyBuffs()
@@ -133,7 +131,6 @@ export default class Creature extends Container {
     if (this.isAdjacentTo(player)) {
       gameEngine.processAttack({from:this, to:player})
     } else if (this.isSeeingDanger(fovres, map)) {
-      console.log('ok, so moving')
       if(this.livingState.health > -0.68) {
         // move towards player
         gameEngine.moveTowardDest(this, player.position)

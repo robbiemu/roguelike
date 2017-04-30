@@ -4,46 +4,47 @@ import { store } from '../store/index.js'
 
 export default class Player extends Creature {
   constructor(opts) {
-      opts.automated=false
-      super(opts)
+    opts.health = 1
+    opts.automated=false
+    super(opts)
 
-      let set = (t,p,v) => {
-        t[p] = v
-        if(typeof p === 'number' && 
-            Number.isInteger(p) && p < Number.MAX_SAFE_INTEGER)
-          store.dispatch({
-            reducer: 'infoPanelKey', 
-            type: 'SET KEY', 
-            key: Math.random()
-          })
-
-        return true
-      }
-
-      this.livingState.energyBuffs = 
-        new Proxy(this.livingState.energyBuffs,{set})
-      this.livingState.energyDebuffs = 
-        new Proxy(this.livingState.energyDebuffs,{set})
-      this.livingState.healthBuffs = 
-        new Proxy(this.livingState.healthBuffs,{set})
-      this.livingState.healthDebuffs = 
-        new Proxy(this.livingState.healthDebuffs,{set})
-
-      set = (t,p,v) => {
-        t[p] = v
+    let set = (t,p,v) => {
+      t[p] = v
+      if(typeof p === 'number' && 
+          Number.isInteger(p) && p < Number.MAX_SAFE_INTEGER)
         store.dispatch({
           reducer: 'infoPanelKey', 
           type: 'SET KEY', 
           key: Math.random()
         })
-        if(p === 'health' && v < -1)
-          store.dispatch({ reducer: 'ui', type: 'SET WIN CONDITION', 
-            condition: false})
 
-        return true
-      }
+      return true
+    }
 
-      this.livingState=new Proxy(this.livingState, {set})
+    this.livingState.energyBuffs = 
+      new Proxy(this.livingState.energyBuffs,{set})
+    this.livingState.energyDebuffs = 
+      new Proxy(this.livingState.energyDebuffs,{set})
+    this.livingState.healthBuffs = 
+      new Proxy(this.livingState.healthBuffs,{set})
+    this.livingState.healthDebuffs = 
+      new Proxy(this.livingState.healthDebuffs,{set})
+
+    set = (t,p,v) => {
+      t[p] = v
+      store.dispatch({
+        reducer: 'infoPanelKey', 
+        type: 'SET KEY', 
+        key: Math.random()
+      })
+      if(p === 'health' && v < -1)
+        store.dispatch({ reducer: 'ui', type: 'SET WIN CONDITION', 
+          condition: false})
+
+      return true
+    }
+
+    this.livingState=new Proxy(this.livingState, {set})
 //      this.health, this.healthMultiplier, this.damage, 
 //     this.weapon, this.damageMultiplier
   }
