@@ -2,8 +2,6 @@ import Container from './Container.js'
 
 import { store } from '../store/index.js'
 
-let creature_ids=0;
-
 export default class Creature extends Container {
   constructor({
     name='A Nameless Creature',
@@ -49,7 +47,14 @@ export default class Creature extends Container {
     }))
   }
 
+  isAdjacentTo (object) {
+    return (Math.abs(this.position.x - object.position.x) <= 1) && 
+    (Math.abs(this.position.y - object.position.y) <= 1)
+  }
+
   move(vector) {
+    this.position.x = this.position.x + vector.x
+    this.position.y = this.position.y + vector.y
     store.dispatch({
       reducer: 'dungeon', 
       type: 'MOVE OBJECT', 
@@ -96,7 +101,7 @@ export default class Creature extends Container {
     return 'should be dead now'
   }
   
-  processTurn (gameEngine) {
+  processTurn () {
     this.consumeEnergyPerTurn()
     this.processEnergyBuffs()
     this.processEnergyDebuffs()
@@ -109,34 +114,28 @@ export default class Creature extends Container {
     this.livingState.health = this.boundStat(this.livingState.health)
     
     if(this.livingState.automated && !this.isDead())
-      this.doSomething(gameEngine)
+      this.doSomething()
   }
   
-  doSomething (gameEngine) {
-    let player = store.getState().player
-    let map = store.getState().dungeon.map
+  doSomething () {
+    let state = store.getState()
+    let player = state.player
+    let map = state.dungeon.map
+    let fov = state.dungeon.dg.fov
+    let gameEngine = state.ui.gameEngine
 
-    let vectors = [
-      {x:1,y:0},
-      {x:-1,y:0},
-      {x:0,y:1},
-      {x:0,y:-1},
-      {x:1,y:1},
-      {x:-1,y:1},
-      {x:-1,y:-1},
-      {x:1,y:-1}
-    ]
-    if (
-      vectors.some(p => {
-        let x = this.position.x + p.x
-        let y = this.position.y + p.y
-        return (x>=0 && y>=0 && x < map.length && y < map[0].length)?
-          (map[x][y].objects.indexOf(player) !== -1):
-          false
-      })
-    ) {
+    if (this.isAdjacentTo(player)) {
       gameEngine.processAttack({from:this, to:player})
-    }
+    }/* else if (this.isSeeingDanger(fov.getVisible(this),map)) {
+      console.log('ok, so moving')
+      if(this.livingState.health > -0.68) {
+        // move towards player
+        gameEngine.moveTowardDest(this, player.position)
+      } else {
+        // move away from player
+        gameEngine.moveAwayFrom(this, player)
+      }
+    }*/
     return
   }
 

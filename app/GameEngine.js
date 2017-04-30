@@ -91,7 +91,7 @@ export default class GameEngine {
       row.forEach((cel, ci) => cel.objects
         .filter(o => !o.isPossessable() && o.hasTurn() )
         .forEach(o => {
-          o.processTurn(this, map)
+          o.processTurn()
           if (o.isDead() && !o.isPlayer()) { // player watches their own death for game state
             console.log(`${o.name} is dead!`)
             this.kill(o, {x:ri, y:ci})
@@ -102,14 +102,22 @@ export default class GameEngine {
     this.draw()
   }
 
-  moveToDest (creature, dest) {
+  moveTowardDest (creature, dest) {
     let path = this.plotPath(creature, dest)
-    console.log('path that was determined: ', path)
     if (path)
+      if(!creature.isPlayer())
+        console.log('creature wants to move ', path)
       creature.move({
-        x:path[1][0]-creature.position.x, 
-        y: path[1][1]-creature.position.y
+        x: path[1][0] - creature.position.x, 
+        y: path[1][1] - creature.position.y
       })
+  }
+  moveAwayFrom (creature, fromCreature) {
+    let dest = {
+      x:-1 * (fromCreature.position.x - creature.position.x),
+      y:-1 * (fromCreature.position.y - creature.position.y)
+    }
+    moveTowardDest (creature, dest)
   }
 
   plotPath (creature, dest) {
