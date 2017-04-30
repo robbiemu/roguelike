@@ -61,7 +61,14 @@ export default class Player extends Creature {
     }
     return damage
   }
-  getDamage() { // so the way the above is written, it is better to reuse it
+  getDamage() {
+  /* we could expire ranged weapons for a maximum to their benefit  
+  if (this.livingState.weapon && 
+        this.livingState.weapon.multipliable &&        
+        this.livingState.energy < this.livingState.weapon.damage &&
+        this.livingState.weapon.damage < this.livingState.damageMultiplier * 
+          Math.random())
+      this.livingState.weapon = undefined */
     return this.getEffectiveDamage() * Math.random()
   }
   move(vector) {

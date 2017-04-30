@@ -96,6 +96,9 @@ export default class Creature extends Container {
     this.healPerTurn()
     this.processHealthBuffs()
     this.processHealthDebuffs()
+
+    this.boundStat(this.livingState.energy)
+    this.boundStat(this.livingState.health)
     
     if(this.livingState.automated && !this.isDead())
       this.doSomething(gameEngine)
@@ -128,11 +131,16 @@ export default class Creature extends Container {
     }
     return
   }
+
+  boundStat(stat) {
+    if(stat < -1)
+      stat = -1.00000000001
+    if(stat > 1)
+      stat = 1
+  }
   
   consumeEnergyPerTurn () {
     this.livingState.energy -= 	1 / 1316
-    if(this.livingState.energy < -1)
-      this.livingState.energy = -1
   }
   
   processEnergyDebuffs() {
@@ -162,7 +170,7 @@ export default class Creature extends Container {
       let x = Math.random() * (this.livingState.health - 
         this.livingState.energy)
       let amount = x < 0.0027 && x > 0 && this.livingState.health < 0? x: 0.0027
-      this.livingState.health += amount
+      this.livingState.health += amount 
     }
   }
   
