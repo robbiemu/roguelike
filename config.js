@@ -5,6 +5,7 @@ System.config({
     'react-dom': '//unpkg.com/react-dom@15.5.0/dist/react-dom.js',
     'redux': '//unpkg.com/redux@3.6.0/dist/redux.js',
     'react-redux': '//wzrd.in/standalone/',
+    'lodash.debounce': '//wzrd.in/standalone/lodash.debounce@latest',
     'permissive-fov': '//wzrd.in/standalone/permissive-fov',
     'pathfinding': '//wzrd.in/standalone/pathfinding',
 //    'chai': '//unpkg.com/chai@3.5.0',

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import debounce from 'lodash.debounce'
 
 import { store, mapStateToProps } from '../store/index.js'
 
@@ -20,12 +21,14 @@ function getMousePos(canvas, evt) {
 
 class ControlsPreRedux extends React.Component {
   addEventListeners () { //call me from parent!
-    window.addEventListener('keydown', ((e) => this.handleKeypress(this,e)))
+    window.addEventListener('keydown', debounce(
+      ((e) => this.handleKeypress(this,e)),150, {leading:true}))
     
     let canvas = document.getElementById(this.props.canvasID)
 
     canvas.addEventListener('mousemove', ((e) => this.mouseMove(this,e)), false)
-    canvas.addEventListener('click', ((e) => this.onClick(this,e)), false)    
+    canvas.addEventListener('click', debounce(
+      ((e) => this.onClick(this,e)),150, {leading:true}), false)    
     canvas.addEventListener ('mouseout', () => 
       store.dispatch({
         reducer: 'ui', 
