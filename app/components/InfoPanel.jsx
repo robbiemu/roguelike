@@ -7,7 +7,7 @@ import CreatureFactory from '../map/CreatureFactory.js'
 import Surfaces from '../map/Surfaces.js'
 import Objects from '../map/Objects.js'
 
-export default class InfoPanelPreRedux extends React.Component {
+class InfoPanelPreRedux extends React.Component {
   getWeaponOfPlayer () {
     return this.props.player.livingState.weapon? 
       this.props.player.livingState.weapon.name + ' ('+

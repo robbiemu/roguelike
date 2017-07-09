@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 
 import { store, mapStateToProps } from '../store/index.js'
 
-export default class WinConditionPreRedux extends React.Component {
+
+class WinConditionPreRedux extends React.Component {
   constructor (props) {
     super(props)
     this.state = {previousWinCondition:undefined}
