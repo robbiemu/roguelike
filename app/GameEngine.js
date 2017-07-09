@@ -117,11 +117,14 @@ export default class GameEngine {
       })
   }
   moveAwayFrom (creature, fromCreature) {
+    let map = store.getState().dungeon.map
     let dest = {
       x:-1 * (fromCreature.position.x - creature.position.x),
       y:-1 * (fromCreature.position.y - creature.position.y)
     }
-    this.moveTowardDest (creature, dest)
+    if(map[dest.x][dest.y].surface) {
+      this.moveTowardDest (creature, dest)
+    }
   }
 
   plotPath (creature, dest) {
